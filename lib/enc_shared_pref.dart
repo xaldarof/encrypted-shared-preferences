@@ -47,4 +47,11 @@ class EncryptedSharedPreferences {
       return null;
     }
   }
+
+  Future<bool> remove(String key) async {
+    assert(_sharedPreferences != null);
+    String dataKey = _aes.encrypt(_key, key).base64;
+    var value = _sharedPreferences!.getString(dataKey);
+    return _sharedPreferences!.remove(value!);
+  }
 }

@@ -1,6 +1,6 @@
-name: encrypted_shared_preferences
+name: encrypt_shared_preferences
 description: Encrypted SharedPreferences.
-version: 0.0.1
+version: 0.0.2
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
 environment:
