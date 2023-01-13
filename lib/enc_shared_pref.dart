@@ -77,6 +77,42 @@ class EncryptedSharedPreferences {
     return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
   }
 
+  Future<bool> setInt(String dataKey, int dataValue) async {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
+    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    String encryptedBase64Value = encryptedData.base64;
+
+    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+  }
+
+  Future<bool> setDouble(String dataKey, double dataValue) async {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
+    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    String encryptedBase64Value = encryptedData.base64;
+
+    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+  }
+
+  Future<bool> setBoolean(String dataKey, bool dataValue) async {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
+    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    String encryptedBase64Value = encryptedData.base64;
+
+    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+  }
+
   String? getString(String key) {
     assert(_sharedPreferences != null);
     assert(_key != null,
@@ -86,6 +122,56 @@ class EncryptedSharedPreferences {
     if (value != null) {
       var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       return decrypted;
+    } else {
+      return null;
+    }
+  }
+
+  int? getInt(String key) {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    var value = _sharedPreferences!.getString(dataKey);
+    if (value != null) {
+      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      try {
+        return int.parse(decrypted);
+      } catch (e) {
+        throw Exception("Value with current key found, but is not subtype of int");
+      }
+    } else {
+      return null;
+    }
+  }
+
+  double? getDouble(String key) {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    var value = _sharedPreferences!.getString(dataKey);
+    if (value != null) {
+      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      try {
+        return double.parse(decrypted);
+      } catch (e) {
+        throw Exception("Value with current key found, but is not subtype of double");
+      }
+    } else {
+      return null;
+    }
+  }
+
+  bool? getBoolean(String key) {
+    assert(_sharedPreferences != null);
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    var value = _sharedPreferences!.getString(dataKey);
+    if (value != null) {
+      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      return decrypted == "true";
     } else {
       return null;
     }

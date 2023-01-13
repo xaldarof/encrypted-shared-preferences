@@ -9,9 +9,24 @@ void main() async {
   sharedPref.setEncryptionKey("xxxx xxxx xxxxxx");
   sharedPref.setEncryptionMode(AESMode.cfb64);
 
-  test('check data saved', () async {
+  test('check data string saved', () async {
     sharedPref.setString("dataKey", "dataValue");
     expect(sharedPref.getString('dataKey'), "dataValue");
+  });
+
+  test('check data int saved', () async {
+    sharedPref.setInt("age", 99);
+    expect(sharedPref.getInt('age'), 99);
+  });
+
+  test('check data double saved', () async {
+    sharedPref.setDouble("pi", 3.14);
+    expect(sharedPref.getDouble('pi'), 3.14);
+  });
+
+  test('check data boolean saved', () async {
+    sharedPref.setBoolean("isPremium", true);
+    expect(sharedPref.getBoolean('isPremium'), true);
   });
 
   test('check data clear', () async {
