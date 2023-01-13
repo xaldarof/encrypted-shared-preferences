@@ -31,9 +31,16 @@ class EncryptedSharedPreferences {
     return _sharedPreferences!.clear();
   }
 
+  Future<bool> remove(String key) async {
+    assert(_sharedPreferences != null);
+    String dataKey = _aes.encrypt(_key!, key).base64;
+    return _sharedPreferences!.remove(dataKey);
+  }
+
   Future<bool> setString(String dataKey, String dataValue) async {
     assert(_sharedPreferences != null);
-    assert(_key != null,"Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
     Encrypted encryptedKey = _aes.encrypt(_key!, dataKey);
     String encryptedBase64Key = encryptedKey.base64;
     Encrypted encryptedData = _aes.encrypt(_key!, dataValue);
@@ -44,7 +51,8 @@ class EncryptedSharedPreferences {
 
   String? getString(String key) {
     assert(_sharedPreferences != null);
-    assert(_key != null,"Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    assert(_key != null,
+        "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
     String dataKey = _aes.encrypt(_key!, key).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
