@@ -14,6 +14,22 @@ void main() {
   await sharedPref.setString('user_token', 'xxxxxxxxxxxx');
 
   await sharedPref.getString('user_token'); //xxxxxxxxxxxx
+  
+  
+  await sharedPref.setInt('age', 99);
+  
+  await sharedPref.getInt('age'); //99
+  
+  
+  await sharedPref.setDouble('pi', 3.14);
+  
+  await sharedPref.getDouble('pi'); //3.14
+  
+  
+  await sharedPref.setBoolean('isPremium', true); //3.14
+  
+  
+  await sharedPref.getBoolean('isPremium'); //3.14
 
   await sharedPref.remove('user_token'); //true/false
 
