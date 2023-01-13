@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final sharedPref = await EncryptedSharedPreferences.getInstance();
   sharedPref.setEncryptionKey("xxxx xxxx xxxxxx");
+  sharedPref.setEncryptionMode(AESMode.cfb64);
 
   test('check data saved', () async {
     sharedPref.setString("dataKey", "dataValue");
