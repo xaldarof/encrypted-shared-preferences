@@ -37,6 +37,30 @@ class EncryptedSharedPreferences {
     return _sharedPreferences!.remove(dataKey);
   }
 
+  Future<Set<String>> getKeys() async {
+    assert(_sharedPreferences != null);
+    return _sharedPreferences!.getKeys().map((e) {
+      String dataKey = _aes.decrypt(_key!, Encrypted.fromBase64(e));
+      return dataKey;
+    }).toSet();
+  }
+
+  Future<Map<String, String>> getKeyValues() async {
+    assert(_sharedPreferences != null);
+
+    var keyValues = Map<String, String>.fromIterable(key: (v) {
+      String dataKey = _aes.decrypt(_key!, Encrypted.fromBase64(v));
+      return dataKey;
+    },
+    value:(v) {
+      String dataValue = _aes.decrypt(_key!, Encrypted.fromBase64(_sharedPreferences!.getString(v)!));
+      return dataValue;
+    }
+    ,_sharedPreferences!.getKeys());
+
+    return keyValues;
+  }
+
   Future<bool> setString(String dataKey, String dataValue) async {
     assert(_sharedPreferences != null);
     assert(_key != null,
