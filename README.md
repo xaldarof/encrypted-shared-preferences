@@ -26,7 +26,7 @@ void main() {
   await sharedPref.getDouble('pi'); //3.14
   
   
-  await sharedPref.setBoolean('isPremium', true); //3.14
+  await sharedPref.setBoolean('isPremium', true);
   
   
   await sharedPref.getBoolean('isPremium'); //true
