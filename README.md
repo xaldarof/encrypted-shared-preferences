@@ -29,7 +29,7 @@ void main() {
   await sharedPref.setBoolean('isPremium', true); //3.14
   
   
-  await sharedPref.getBoolean('isPremium'); //3.14
+  await sharedPref.getBoolean('isPremium'); //true
 
   await sharedPref.remove('user_token'); //true/false
 
