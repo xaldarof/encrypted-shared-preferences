@@ -2,6 +2,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'encryptor.dart';
+import 'listener.dart';
 
 class EncryptedSharedPreferences {
   EncryptedSharedPreferences._();
@@ -10,9 +11,11 @@ class EncryptedSharedPreferences {
   AESMode? _aesMode;
 
   static late SharedPreferences? _sharedPreferences;
+  final List<OnValueChangeListener> _listeners = [];
   final AESEncryptor _aes = const AESEncryptor();
 
-  static final EncryptedSharedPreferences _instance = EncryptedSharedPreferences._();
+  static final EncryptedSharedPreferences _instance =
+      EncryptedSharedPreferences._();
 
   factory EncryptedSharedPreferences() {
     return _instance;
@@ -45,7 +48,8 @@ class EncryptedSharedPreferences {
   Future<Set<String>> getKeys() async {
     assert(_sharedPreferences != null);
     return _sharedPreferences!.getKeys().map((e) {
-      String dataKey = _aes.decrypt(_key!, Encrypted.fromBase64(e), mode: _aesMode);
+      String dataKey =
+          _aes.decrypt(_key!, Encrypted.fromBase64(e), mode: _aesMode);
       return dataKey;
     }).toSet();
   }
@@ -54,11 +58,13 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
 
     var keyValues = Map<String, String>.fromIterable(key: (v) {
-      String dataKey = _aes.decrypt(_key!, Encrypted.fromBase64(v), mode: _aesMode);
+      String dataKey =
+          _aes.decrypt(_key!, Encrypted.fromBase64(v), mode: _aesMode);
       return dataKey;
     }, value: (v) {
-      String dataValue = _aes
-          .decrypt(_key!, Encrypted.fromBase64(_sharedPreferences!.getString(v)!), mode: _aesMode);
+      String dataValue = _aes.decrypt(
+          _key!, Encrypted.fromBase64(_sharedPreferences!.getString(v)!),
+          mode: _aesMode);
       return dataValue;
     }, _sharedPreferences!.getKeys());
 
@@ -74,7 +80,11 @@ class EncryptedSharedPreferences {
     Encrypted encryptedData = _aes.encrypt(_key!, dataValue, mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+    var oldValue = getString(dataKey);
+    var result = await _sharedPreferences!
+        .setString(encryptedBase64Key, encryptedBase64Value);
+    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+    return result;
   }
 
   Future<bool> setInt(String dataKey, int dataValue) async {
@@ -83,10 +93,16 @@ class EncryptedSharedPreferences {
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
     Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    Encrypted encryptedData =
+        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+    var oldValue = getInt(dataKey);
+    var result = await _sharedPreferences!
+        .setString(encryptedBase64Key, encryptedBase64Value);
+    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+
+    return result;
   }
 
   Future<bool> setDouble(String dataKey, double dataValue) async {
@@ -95,10 +111,16 @@ class EncryptedSharedPreferences {
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
     Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    Encrypted encryptedData =
+        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+    var oldValue = getDouble(dataKey);
+    var result = await _sharedPreferences!
+        .setString(encryptedBase64Key, encryptedBase64Value);
+    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+
+    return result;
   }
 
   Future<bool> setBoolean(String dataKey, bool dataValue) async {
@@ -107,10 +129,16 @@ class EncryptedSharedPreferences {
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
     Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData = _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+    Encrypted encryptedData =
+        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    return _sharedPreferences!.setString(encryptedBase64Key, encryptedBase64Value);
+    var oldValue = getBoolean(dataKey);
+    var result = await _sharedPreferences!
+        .setString(encryptedBase64Key, encryptedBase64Value);
+    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+
+    return result;
   }
 
   String? getString(String key) {
@@ -120,7 +148,8 @@ class EncryptedSharedPreferences {
     String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
-      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      var decrypted =
+          _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       return decrypted;
     } else {
       return null;
@@ -134,11 +163,13 @@ class EncryptedSharedPreferences {
     String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
-      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      var decrypted =
+          _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       try {
         return int.parse(decrypted);
       } catch (e) {
-        throw Exception("Value with current key found, but is not subtype of int");
+        throw Exception(
+            "Value with current key found, but is not subtype of int");
       }
     } else {
       return null;
@@ -152,11 +183,13 @@ class EncryptedSharedPreferences {
     String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
-      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      var decrypted =
+          _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       try {
         return double.parse(decrypted);
       } catch (e) {
-        throw Exception("Value with current key found, but is not subtype of double");
+        throw Exception(
+            "Value with current key found, but is not subtype of double");
       }
     } else {
       return null;
@@ -170,10 +203,31 @@ class EncryptedSharedPreferences {
     String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
-      var decrypted = _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
+      var decrypted =
+          _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       return decrypted == "true";
     } else {
       return null;
     }
   }
+
+  _invokeListeners(String key, dynamic value, dynamic oldValue) async {
+    for (var element in _listeners) {
+      element.call(key, value, oldValue);
+    }
+  }
+
+  void addListener(OnValueChangeListener listener) {
+    _listeners.add(listener);
+  }
+
+  void removeListener(OnValueChangeListener listener) {
+    _listeners.remove(listener);
+  }
+
+  void removeAllListeners() {
+    _listeners.clear();
+  }
+
+  int get listeners => _listeners.length;
 }

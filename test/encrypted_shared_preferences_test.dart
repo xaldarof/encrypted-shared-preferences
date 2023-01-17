@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
+import 'package:encrypt_shared_preferences/listener.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -55,5 +56,26 @@ void main() async {
     await sharedPref.setString("dataKey1", "dataValue1");
     var keys = await sharedPref.getKeyValues();
     expect(keys.length, 2);
+  });
+
+  test('check invoke listener', () async {
+    await sharedPref.clear();
+    listener(String key,value,oldValue) {
+      expect(key, "dataKey");
+      expect(value, "dataValue");
+      expect(oldValue, null);
+    }
+    sharedPref.addListener(listener);
+    sharedPref.setString("dataKey", "dataValue");
+    sharedPref.removeListener(listener);
+  });
+
+  test('check add listener', () {
+    sharedPref.removeAllListeners();
+    expect(sharedPref.listeners, 0);
+    sharedPref.addListener((key, value, oldValue) {});
+    sharedPref.addListener((key, value, oldValue) {});
+    expect(sharedPref.listeners, 2);
+
   });
 }
