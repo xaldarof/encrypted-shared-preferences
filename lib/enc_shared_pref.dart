@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:encrypt/encrypt.dart';
+import 'package:encrypt_shared_preferences/stream_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'encryptor.dart';
@@ -12,7 +15,13 @@ class EncryptedSharedPreferences {
 
   static late SharedPreferences? _sharedPreferences;
   final List<OnValueChangeListener> _listeners = [];
+  bool _canListen = true;
+  bool _canListenSingle = true;
   final AESEncryptor _aes = const AESEncryptor();
+  final StreamController<StreamData> _streamSingle =
+      StreamController.broadcast();
+  final StreamController<Map<String, dynamic>> _stream =
+      StreamController.broadcast();
 
   static final EncryptedSharedPreferences _instance =
       EncryptedSharedPreferences._();
@@ -141,7 +150,7 @@ class EncryptedSharedPreferences {
     return result;
   }
 
-  String? getString(String key) {
+  String? getString(String key, {String? defaultValue}) {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
@@ -152,11 +161,11 @@ class EncryptedSharedPreferences {
           _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       return decrypted;
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
-  int? getInt(String key) {
+  int? getInt(String key, {int? defaultValue}) {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
@@ -172,11 +181,11 @@ class EncryptedSharedPreferences {
             "Value with current key found, but is not subtype of int");
       }
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
-  double? getDouble(String key) {
+  double? getDouble(String key, {double? defaultValue}) {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
@@ -192,11 +201,11 @@ class EncryptedSharedPreferences {
             "Value with current key found, but is not subtype of double");
       }
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
-  bool? getBoolean(String key) {
+  bool? getBoolean(String key, {bool? defaultValue}) {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
@@ -207,11 +216,17 @@ class EncryptedSharedPreferences {
           _aes.decrypt(_key!, Encrypted.fromBase64(value), mode: _aesMode);
       return decrypted == "true";
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
   _invokeListeners(String key, dynamic value, dynamic oldValue) async {
+    if(_canListen) {
+      _stream.add(await getKeyValues());
+    }
+    if(_canListenSingle) {
+      _streamSingle.add(StreamData(key: key, value: value, oldValue: oldValue));
+    }
     for (var element in _listeners) {
       element.call(key, value, oldValue);
     }
@@ -229,5 +244,17 @@ class EncryptedSharedPreferences {
     _listeners.clear();
   }
 
+  void setCanStreamListen(bool canListen) {
+    _canListen = canListen;
+  }
+
+  void setCanListenSingle(bool canListen) {
+    _canListenSingle = canListen;
+  }
+
   int get listeners => _listeners.length;
+
+  Stream<StreamData> get listenableSingle => _streamSingle.stream;
+
+  Stream<Map<String, dynamic>> get listenable => _stream.stream;
 }

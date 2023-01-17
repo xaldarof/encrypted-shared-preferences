@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
 import 'package:encrypt_shared_preferences/listener.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -65,17 +66,47 @@ void main() async {
       expect(value, "dataValue");
       expect(oldValue, null);
     }
+
+    sharedPref.listenableSingle.listen((event) {
+      expect(event.key, "dataKey");
+      expect(event.value, "dataValue");
+      expect(event.oldValue, null);
+    });
+
     sharedPref.addListener(listener);
     sharedPref.setString("dataKey", "dataValue");
-    sharedPref.removeListener(listener);
+    sharedPref.removeAllListeners();
   });
 
-  test('check add listener', () {
+  test('check stream single', () async {
+    await sharedPref.clear();
+    sharedPref.listenableSingle.listen((event) {
+      expect(event.key, "dataKey");
+      expect(event.value, "dataValue");
+      expect(event.oldValue, null);
+    });
+    sharedPref.setString("dataKey", "dataValue");
+    sharedPref.setCanListenSingle(false);
+  });
+
+  test('check stream', () async {
+    await sharedPref.clear();
+
+    sharedPref.listenable.listen((event) {
+      print(event);
+      expect(event.length, 3);
+    });
+    sharedPref.setString("dataKey", "dataValue");
+    sharedPref.setString("dataKey1", "dataValue1");
+    sharedPref.setString("dataKey2", "dataValue2");
+  });
+
+  test('check add listener', () async {
     sharedPref.removeAllListeners();
     expect(sharedPref.listeners, 0);
     sharedPref.addListener((key, value, oldValue) {});
     sharedPref.addListener((key, value, oldValue) {});
     expect(sharedPref.listeners, 2);
-
   });
+
 }
