@@ -26,9 +26,6 @@ class EncryptedSharedPreferences {
   static final EncryptedSharedPreferences _instance =
       EncryptedSharedPreferences._();
 
-  factory EncryptedSharedPreferences() {
-    return _instance;
-  }
 
   static Future<EncryptedSharedPreferences> getInstance() async {
     _sharedPreferences = await SharedPreferences.getInstance();
