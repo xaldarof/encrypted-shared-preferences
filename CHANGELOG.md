@@ -6,3 +6,4 @@
 * 0.0.5: Encryption modes.
 * 0.0.6: Support: double,int,boolean
 * 0.0.7: listeners, stream, single listen, listen all prefs
+* 0.1.0: listen single key

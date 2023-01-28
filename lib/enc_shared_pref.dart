@@ -15,8 +15,6 @@ class EncryptedSharedPreferences {
 
   static late SharedPreferences? _sharedPreferences;
   final List<OnValueChangeListener> _listeners = [];
-  bool _canListen = true;
-  bool _canListenSingle = true;
   final AESEncryptor _aes = const AESEncryptor();
   final StreamController<StreamData> _streamSingle =
       StreamController.broadcast();
@@ -218,12 +216,8 @@ class EncryptedSharedPreferences {
   }
 
   _invokeListeners(String key, dynamic value, dynamic oldValue) async {
-    if(_canListen) {
       _stream.add(await getKeyValues());
-    }
-    if(_canListenSingle) {
       _streamSingle.add(StreamData(key: key, value: value, oldValue: oldValue));
-    }
     for (var element in _listeners) {
       element.call(key, value, oldValue);
     }
@@ -233,20 +227,21 @@ class EncryptedSharedPreferences {
     _listeners.add(listener);
   }
 
+  Stream<StreamData> listenKey(String key) async* {
+    await for(final event in listenableSingle) {
+      if (event.key == key) {
+        yield StreamData(
+            key: event.key, value: event.value, oldValue: event.oldValue);
+      }
+    }
+  }
+
   void removeListener(OnValueChangeListener listener) {
     _listeners.remove(listener);
   }
 
   void removeAllListeners() {
     _listeners.clear();
-  }
-
-  void setCanStreamListen(bool canListen) {
-    _canListen = canListen;
-  }
-
-  void setCanListenSingle(bool canListen) {
-    _canListenSingle = canListen;
   }
 
   int get listeners => _listeners.length;

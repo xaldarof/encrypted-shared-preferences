@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
-import 'package:encrypt_shared_preferences/listener.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:encrypt_shared_preferences/stream_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
@@ -61,44 +58,43 @@ void main() async {
 
   test('check invoke listener', () async {
     await sharedPref.clear();
+    sharedPref.removeAllListeners();
     listener(String key,value,oldValue) {
       expect(key, "dataKey");
       expect(value, "dataValue");
       expect(oldValue, null);
     }
 
-    sharedPref.listenableSingle.listen((event) {
-      expect(event.key, "dataKey");
-      expect(event.value, "dataValue");
-      expect(event.oldValue, null);
-    });
-
     sharedPref.addListener(listener);
     sharedPref.setString("dataKey", "dataValue");
     sharedPref.removeAllListeners();
   });
 
+  test('check single key stream listener', () async {
+    await sharedPref.clear();
+    sharedPref.listenKey('token').listen((event) {
+      expect(event.value, 'fake_token_value');
+    });
+    sharedPref.setString('token', 'fake_token_value');
+  });
+
   test('check stream single', () async {
     await sharedPref.clear();
-    sharedPref.listenableSingle.listen((event) {
-      expect(event.key, "dataKey");
-      expect(event.value, "dataValue");
-      expect(event.oldValue, null);
-    });
-    sharedPref.setString("dataKey", "dataValue");
-    sharedPref.setCanListenSingle(false);
+    sharedPref.listenableSingle.listen(expectAsync1((event) {
+      expect(event.value,"stream_single_value");
+    }));
+
+    sharedPref.setString("steam_single", "stream_single_value");
   });
+  
 
   test('check stream', () async {
     await sharedPref.clear();
 
-    sharedPref.listenable.listen((event) {
-      print(event);
-      expect(event.length, 3);
-    });
+    sharedPref.listenable.listen(expectAsync1((event) {
+      expect(event.length, 1);
+    }));
     sharedPref.setString("dataKey", "dataValue");
-    sharedPref.setString("dataKey1", "dataValue1");
-    sharedPref.setString("dataKey2", "dataValue2");
   });
 
   test('check add listener', () async {
@@ -108,5 +104,4 @@ void main() async {
     sharedPref.addListener((key, value, oldValue) {});
     expect(sharedPref.listeners, 2);
   });
-
 }

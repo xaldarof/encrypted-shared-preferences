@@ -54,6 +54,13 @@ void main() {
     print(event.value);
     print(event.oldValue);
   });
+  
+
+  sharedPref.listenKey('token').listen((event) { //StreamData
+    print(event.key);
+    print(event.value);
+    print(event.oldValue);
+  });
 }
 
 ```
