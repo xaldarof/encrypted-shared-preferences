@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/stream_data.dart';
@@ -24,7 +25,6 @@ class EncryptedSharedPreferences {
   static final EncryptedSharedPreferences _instance =
       EncryptedSharedPreferences._();
 
-
   static Future<EncryptedSharedPreferences> getInstance() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     return _instance;
@@ -40,13 +40,17 @@ class EncryptedSharedPreferences {
 
   Future<bool> clear() async {
     assert(_sharedPreferences != null);
-    return _sharedPreferences!.clear();
+    final cleared = await _sharedPreferences!.clear();
+    _invokeListeners('', null, null);
+    return cleared;
   }
 
   Future<bool> remove(String key) async {
     assert(_sharedPreferences != null);
     String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
-    return _sharedPreferences!.remove(dataKey);
+    final removed = await _sharedPreferences!.remove(dataKey);
+    _invokeListeners(key, null, null);
+    return removed;
   }
 
   Future<Set<String>> getKeys() async {
@@ -216,8 +220,8 @@ class EncryptedSharedPreferences {
   }
 
   _invokeListeners(String key, dynamic value, dynamic oldValue) async {
-      _stream.add(await getKeyValues());
-      _streamSingle.add(StreamData(key: key, value: value, oldValue: oldValue));
+    _stream.add(await getKeyValues());
+    _streamSingle.add(StreamData(key: key, value: value, oldValue: oldValue));
     for (var element in _listeners) {
       element.call(key, value, oldValue);
     }
@@ -228,7 +232,7 @@ class EncryptedSharedPreferences {
   }
 
   Stream<StreamData> listenKey(String key) async* {
-    await for(final event in listenableSingle) {
+    await for (final event in listenableSingle) {
       if (event.key == key) {
         yield StreamData(
             key: event.key, value: event.value, oldValue: event.oldValue);
