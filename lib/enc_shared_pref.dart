@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
-
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/stream_data.dart';
+import 'package:encrypt_shared_preferences/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'encryptor.dart';
@@ -47,9 +46,9 @@ class EncryptedSharedPreferences {
 
   Future<bool> remove(String key) async {
     assert(_sharedPreferences != null);
-    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    String dataKey = _aes.encrypt(_key!, key.enc, mode: _aesMode).base64;
     final removed = await _sharedPreferences!.remove(dataKey);
-    _invokeListeners(key, null, null);
+    _invokeListeners(key.enc, null, null);
     return removed;
   }
 
@@ -58,24 +57,34 @@ class EncryptedSharedPreferences {
     return _sharedPreferences!.getKeys().map((e) {
       String dataKey =
           _aes.decrypt(_key!, Encrypted.fromBase64(e), mode: _aesMode);
-      return dataKey;
+      return dataKey.replaceFirst(identifier, "");
     }).toSet();
   }
 
   Future<Map<String, String>> getKeyValues() async {
     assert(_sharedPreferences != null);
 
-    var keyValues = Map<String, String>.fromIterable(key: (v) {
-      String dataKey =
-          _aes.decrypt(_key!, Encrypted.fromBase64(v), mode: _aesMode);
-      return dataKey;
-    }, value: (v) {
-      String dataValue = _aes.decrypt(
-          _key!, Encrypted.fromBase64(_sharedPreferences!.getString(v)!),
-          mode: _aesMode);
-      return dataValue;
-    }, _sharedPreferences!.getKeys());
-
+    var keyValues = <String, String>{};
+    if (_sharedPreferences!.getKeys().isNotEmpty) {
+      keyValues = Map<String, String>.fromIterable(key: (v) {
+        if (v.toString().startsWith(identifier)) {
+          String dataKey =
+              _aes.decrypt(_key!, Encrypted.fromBase64(v), mode: _aesMode);
+          return dataKey;
+        } else {
+          return v;
+        }
+      }, value: (v) {
+        if (v.toString().startsWith(identifier)) {
+          String dataValue = _aes.decrypt(
+              _key!, Encrypted.fromBase64(_sharedPreferences!.getString(v)!),
+              mode: _aesMode);
+          return dataValue;
+        } else {
+          return v;
+        }
+      }, _sharedPreferences!.getKeys());
+    }
     return keyValues;
   }
 
@@ -83,15 +92,15 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
     Encrypted encryptedData = _aes.encrypt(_key!, dataValue, mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getString(dataKey);
+    var oldValue = getString(dataKey.enc);
     var result = await _sharedPreferences!
         .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
     return result;
   }
 
@@ -99,16 +108,16 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
     Encrypted encryptedData =
         _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getInt(dataKey);
+    var oldValue = getInt(dataKey.enc);
     var result = await _sharedPreferences!
         .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
 
     return result;
   }
@@ -117,16 +126,16 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
     Encrypted encryptedData =
         _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getDouble(dataKey);
+    var oldValue = getDouble(dataKey.enc);
     var result = await _sharedPreferences!
         .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
 
     return result;
   }
@@ -135,16 +144,16 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey, mode: _aesMode);
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
     String encryptedBase64Key = encryptedKey.base64;
     Encrypted encryptedData =
         _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
     String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getBoolean(dataKey);
+    var oldValue = getBoolean(dataKey.enc);
     var result = await _sharedPreferences!
         .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey, dataValue, oldValue);
+    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
 
     return result;
   }
@@ -153,7 +162,7 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    String dataKey = _aes.encrypt(_key!, key.enc, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
       var decrypted =
@@ -168,7 +177,7 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    String dataKey = _aes.encrypt(_key!, key.enc, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
       var decrypted =
@@ -188,7 +197,7 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    String dataKey = _aes.encrypt(_key!, key.enc, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
       var decrypted =
@@ -208,7 +217,7 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    String dataKey = _aes.encrypt(_key!, key, mode: _aesMode).base64;
+    String dataKey = _aes.encrypt(_key!, key.enc, mode: _aesMode).base64;
     var value = _sharedPreferences!.getString(dataKey);
     if (value != null) {
       var decrypted =
@@ -223,7 +232,7 @@ class EncryptedSharedPreferences {
     _stream.add(await getKeyValues());
     _streamSingle.add(StreamData(key: key, value: value, oldValue: oldValue));
     for (var element in _listeners) {
-      element.call(key, value, oldValue);
+      element.call(key.replaceFirst(identifier, ""), value, oldValue);
     }
   }
 
@@ -233,9 +242,9 @@ class EncryptedSharedPreferences {
 
   Stream<StreamData> listenKey(String key) async* {
     await for (final event in listenableSingle) {
-      if (event.key == key) {
+      if (event.key == key.enc) {
         yield StreamData(
-            key: event.key, value: event.value, oldValue: event.oldValue);
+            key: key, value: event.value, oldValue: event.oldValue);
       }
     }
   }

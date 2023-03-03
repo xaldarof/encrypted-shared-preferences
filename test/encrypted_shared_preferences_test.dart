@@ -1,9 +1,11 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
-import 'package:encrypt_shared_preferences/stream_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
   final sharedPref = await EncryptedSharedPreferences.getInstance();
   sharedPref.setEncryptionKey("xxxx xxxx xxxxxx");
   sharedPref.setEncryptionMode(AESMode.cfb64);
