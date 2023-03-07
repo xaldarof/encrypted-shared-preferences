@@ -88,74 +88,94 @@ class EncryptedSharedPreferences {
     return keyValues;
   }
 
-  Future<bool> setString(String dataKey, String dataValue) async {
+  Future<bool> setString(String dataKey, String? dataValue) async {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-    String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData = _aes.encrypt(_key!, dataValue, mode: _aesMode);
-    String encryptedBase64Value = encryptedData.base64;
+    if (dataValue?.isEmpty == true && dataValue != null) {
+      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+      String encryptedBase64Key = encryptedKey.base64;
+      Encrypted encryptedData = _aes.encrypt(_key!, dataValue, mode: _aesMode);
+      String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getString(dataKey.enc);
-    var result = await _sharedPreferences!
-        .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
-    return result;
+      var oldValue = getString(dataKey.enc);
+      var result = await _sharedPreferences!
+          .setString(encryptedBase64Key, encryptedBase64Value);
+      if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
+      return result;
+    } else {
+      await _sharedPreferences?.remove(dataKey);
+    }
+    return true;
   }
 
-  Future<bool> setInt(String dataKey, int dataValue) async {
+  Future<bool> setInt(String dataKey, int? dataValue) async {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-    String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData =
-        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
-    String encryptedBase64Value = encryptedData.base64;
+    if (dataValue != null) {
+      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+      String encryptedBase64Key = encryptedKey.base64;
+      Encrypted encryptedData =
+          _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+      String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getInt(dataKey.enc);
-    var result = await _sharedPreferences!
-        .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
-
-    return result;
+      var oldValue = getInt(dataKey.enc);
+      var result = await _sharedPreferences!
+          .setString(encryptedBase64Key, encryptedBase64Value);
+      if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
+      return result;
+    } else {
+      await _sharedPreferences?.remove(dataKey);
+    }
+    return true;
   }
 
-  Future<bool> setDouble(String dataKey, double dataValue) async {
+  Future<bool> setDouble(String dataKey, double? dataValue) async {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-    String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData =
-        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
-    String encryptedBase64Value = encryptedData.base64;
+    if (dataValue != null) {
+      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+      String encryptedBase64Key = encryptedKey.base64;
+      Encrypted encryptedData =
+          _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+      String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getDouble(dataKey.enc);
-    var result = await _sharedPreferences!
-        .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
+      var oldValue = getDouble(dataKey.enc);
+      var result = await _sharedPreferences!
+          .setString(encryptedBase64Key, encryptedBase64Value);
+      if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
 
-    return result;
+      return result;
+    } else {
+      await _sharedPreferences?.remove(dataKey);
+      return true;
+    }
+    return true;
   }
 
-  Future<bool> setBoolean(String dataKey, bool dataValue) async {
+  Future<bool> setBoolean(String dataKey, bool? dataValue) async {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
-    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-    String encryptedBase64Key = encryptedKey.base64;
-    Encrypted encryptedData =
-        _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
-    String encryptedBase64Value = encryptedData.base64;
+    if (dataValue != null) {
+      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+      String encryptedBase64Key = encryptedKey.base64;
+      Encrypted encryptedData =
+          _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
+      String encryptedBase64Value = encryptedData.base64;
 
-    var oldValue = getBoolean(dataKey.enc);
-    var result = await _sharedPreferences!
-        .setString(encryptedBase64Key, encryptedBase64Value);
-    if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
+      var oldValue = getBoolean(dataKey.enc);
+      var result = await _sharedPreferences!
+          .setString(encryptedBase64Key, encryptedBase64Value);
+      if (result) _invokeListeners(dataKey.enc, dataValue, oldValue);
 
-    return result;
+      return result;
+    } else {
+      await _sharedPreferences?.remove(dataKey);
+    }
+    return true;
   }
 
   String? getString(String key, {String? defaultValue}) {
