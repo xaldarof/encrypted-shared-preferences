@@ -92,9 +92,10 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
+
     if (dataValue?.isEmpty == true && dataValue != null) {
-      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-      String encryptedBase64Key = encryptedKey.base64;
       Encrypted encryptedData = _aes.encrypt(_key!, dataValue, mode: _aesMode);
       String encryptedBase64Value = encryptedData.base64;
 
@@ -113,9 +114,9 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
     if (dataValue != null) {
-      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-      String encryptedBase64Key = encryptedKey.base64;
       Encrypted encryptedData =
           _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
       String encryptedBase64Value = encryptedData.base64;
@@ -135,9 +136,9 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
     if (dataValue != null) {
-      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-      String encryptedBase64Key = encryptedKey.base64;
       Encrypted encryptedData =
           _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
       String encryptedBase64Value = encryptedData.base64;
@@ -159,9 +160,9 @@ class EncryptedSharedPreferences {
     assert(_sharedPreferences != null);
     assert(_key != null,
         "Encryption key must not be null ! To fix it use .setEncryptionKey(key) method");
+    Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
+    String encryptedBase64Key = encryptedKey.base64;
     if (dataValue != null) {
-      Encrypted encryptedKey = _aes.encrypt(_key!, dataKey.enc, mode: _aesMode);
-      String encryptedBase64Key = encryptedKey.base64;
       Encrypted encryptedData =
           _aes.encrypt(_key!, dataValue.toString(), mode: _aesMode);
       String encryptedBase64Value = encryptedData.base64;
