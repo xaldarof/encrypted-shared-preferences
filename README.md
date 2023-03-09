@@ -36,9 +36,8 @@ void main() {
   await sharedPref.clear(); //true/false
   
   //returns all key values with updated value;
-  sharedPref.listenable.listen((event) { //Map<String,dynamic>
+  sharedPref.listenable.listen((event) {
     print(event);
-    expect(event.length, 3);
   });
 }
 
