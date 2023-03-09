@@ -34,32 +34,11 @@ void main() {
   await sharedPref.remove('user_token'); //true/false
 
   await sharedPref.clear(); //true/false
-
-
-  sharedPref.addListener((key, value, oldValue) {
-    //
-  });
-
   
   //returns all key values with updated value;
   sharedPref.listenable.listen((event) { //Map<String,dynamic>
     print(event);
     expect(event.length, 3);
-  });
-  
-  
-  //returns key value of current updated value;
-  sharedPref.listenableSingle.listen((event) { //StreamData
-    print(event.key);
-    print(event.value);
-    print(event.oldValue);
-  });
-  
-
-  sharedPref.listenKey('token').listen((event) { //StreamData
-    print(event.key);
-    print(event.value);
-    print(event.oldValue);
   });
 }
 
