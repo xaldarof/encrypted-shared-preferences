@@ -1,17 +1,25 @@
-import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/enc_shared_pref.dart';
-import 'package:encrypt_shared_preferences/stream_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
+  EncryptedSharedPreferences.initialize("123456789dlas[pdlp[asd");
   final sharedPref = await EncryptedSharedPreferences.getInstance();
-  sharedPref.setEncryptionKey("xxxx xxxx xxxxxx");
-  sharedPref.setEncryptionMode(AESMode.cfb64);
   await sharedPref.clear();
 
+  test('test listen key', () async {
+    sharedPref.listen(key: 'singleKey').listen(
+      expectAsync1(
+            (event) {
+          expect(event, 'singleKey');
+        },
+      ),
+    );
+    await sharedPref.setString('singleKey', "Hi");
+    await sharedPref.setString('singleKey', "Hi");
+  });
   test('check data string saved', () async {
     await sharedPref.setString("dataKey", "dataValue");
     expect(sharedPref.getString('dataKey'), "dataValue");
@@ -49,31 +57,5 @@ void main() async {
     sharedPref.setString("dataKey", "dataValue");
     var keys = await sharedPref.getKeys();
     expect(keys.length, 1);
-  });
-
-  test('check get all key values', () async {
-    await sharedPref.setString("dataKey", "dataValue");
-    await sharedPref.setString("dataKey1", "dataValue1");
-    var keys = await sharedPref.getKeyValues();
-    expect(keys.length, 2);
-  });
-
-  test('check stream', () async {
-    final stream = sharedPref.listenable.stream.map((event) => event?.key);
-    stream.listen((event) {
-      //
-    });
-    expectLater(stream, emits('dataKey'));
-
-    await sharedPref.setString("dataKey", "dataValue");
-  });
-
-  test('check stream on clear', () async {
-    final stream = sharedPref.listenable.stream.map((event) => event?.key);
-    stream.listen(expectAsync1((event) {
-      //
-    }));
-    expectLater(stream, emits(null));
-    await sharedPref.clear();
   });
 }
