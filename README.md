@@ -1,7 +1,8 @@
-Wraps platform-specific persistent storage for simple data (NSUserDefaults on iOS and macOS,
-SharedPreferences on Android, etc.). Data may be persisted to disk asynchronously, and there is no
-guarantee that writes will be persisted to disk after returning, so this plugin must be used for
-storing critical data.
+Shared preferences are a simple key-value storage mechanism that can be used to store small amounts of data. However, since shared preferences are stored in plain text, it is not suitable for storing sensitive information. To address this issue, you can use AES encryption to encrypt the data before saving it to shared preferences.
+
+To use shared preferences with AES encryption support, you can add this package to your project as dependency.
+
+
 
 [Open pub.dev](https://pub.dev/packages/encrypt_shared_preferences)
 

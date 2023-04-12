@@ -50,38 +50,47 @@ class EncryptedSharedPreferences {
   }
 
   Future<bool> setString(String dataKey, String? dataValue) async {
+    assert(_key != null);
     return _decorator.setString(dataKey, dataValue);
   }
 
   Future<bool> setInt(String dataKey, int? dataValue) async {
+    assert(_key != null);
     return _decorator.setInt(dataKey, dataValue);
   }
 
   Future<bool> setDouble(String dataKey, double? dataValue) async {
+    assert(_key != null);
     return _decorator.setDouble(dataKey, dataValue);
   }
 
   Future<bool> setBoolean(String dataKey, bool? dataValue) async {
+    assert(_key != null);
     return _decorator.setBool(dataKey, dataValue);
   }
 
   String? getString(String key) {
+    assert(_key != null);
     return _decorator.getString(key);
   }
 
   int? getInt(String key) {
+    assert(_key != null);
     return _decorator.getInt(key);
   }
 
-  double? getDouble(String key, {double? defaultValue}) {
+  double? getDouble(String key) {
+    assert(_key != null);
     return _decorator.getDouble(key);
   }
 
   bool? getBoolean(String key) {
+    assert(_key != null);
     return _decorator.getBool(key);
   }
 
   Stream<String> listen({String? key}) {
+    assert(_key != null);
     return _decorator.listen(key: key);
   }
 }
