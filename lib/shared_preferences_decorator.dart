@@ -24,7 +24,11 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  Future<bool> clear() => _preferences.clear();
+  Future<bool> clear() {
+    final cleared = _preferences.clear();
+    _listenable.add('');
+    return cleared;
+  }
 
   @override
   Future<bool> commit() => _preferences.commit();
