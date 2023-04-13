@@ -149,6 +149,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   Future<bool> save(String key, dynamic value) {
+    listenable.add(key);
     if (value != null) {
       return _preferences.setString(_encryptor.encrypt(_key, key).base64,
           _encryptor.encrypt(_key, value.toString()).base64);
