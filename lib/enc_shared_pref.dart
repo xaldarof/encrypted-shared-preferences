@@ -24,6 +24,8 @@ class EncryptedSharedPreferences {
     return _instance;
   }
 
+  Stream<String> get stream => _decorator.listenable.stream;
+
   static void initialize(String key) {
     _key = key;
   }

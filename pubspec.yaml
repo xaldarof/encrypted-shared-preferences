@@ -1,6 +1,6 @@
 name: encrypt_shared_preferences
 description: Encrypted SharedPreferences for critical data.
-version: 0.2.3
+version: 0.2.5
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
 environment:

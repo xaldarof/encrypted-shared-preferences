@@ -8,11 +8,11 @@ class SharedPreferencesDecorator implements SharedPreferences {
   final SharedPreferences _preferences;
   final AESEncryptor _encryptor;
   final String _key;
-  final StreamController<String> _listenable =
+  final StreamController<String> listenable =
       StreamController<String>.broadcast();
 
   Stream<String> listen({String? key}) async* {
-    await for (final event in _listenable.stream) {
+    await for (final event in listenable.stream) {
       if (key != null) {
         if (event == key) {
           yield key;
@@ -26,7 +26,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   @override
   Future<bool> clear() {
     final cleared = _preferences.clear();
-    _listenable.add('');
+    listenable.add('');
     return cleared;
   }
 
@@ -124,7 +124,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   Future<bool> remove(String key) {
-    _listenable.add(key);
+    listenable.add(key);
     return _preferences.remove(_encryptor.encrypt(_key, key).base64);
   }
 
@@ -145,7 +145,6 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   Future<bool> setString(String key, String? value) {
-    _listenable.add(key);
     return save(key, value);
   }
 
