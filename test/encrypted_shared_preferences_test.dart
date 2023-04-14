@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
-  EncryptedSharedPreferences.initialize("123456789dlas[pdlp[asd");
+  await EncryptedSharedPreferences.initialize("123456789dlas[pdlp[asd");
   final sharedPref = await EncryptedSharedPreferences.getInstance();
   await sharedPref.clear();
 
