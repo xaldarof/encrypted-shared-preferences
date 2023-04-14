@@ -17,16 +17,16 @@ class EncryptedSharedPreferences {
 
   static Future<EncryptedSharedPreferences> getInstance() async {
     assert(_key != null);
-    _decorator = SharedPreferencesDecorator(
-        preferences: await SharedPreferences.getInstance(),
-        encryptor: _aes,
-        key: _key!);
     return _instance;
   }
 
   Stream<String> get stream => _decorator.listenable.stream;
 
-  static void initialize(String key) {
+  static Future<void> initialize(String key) async {
+    _decorator = SharedPreferencesDecorator(
+        preferences: await SharedPreferences.getInstance(),
+        encryptor: _aes,
+        key: _key!);
     _key = key;
   }
 
