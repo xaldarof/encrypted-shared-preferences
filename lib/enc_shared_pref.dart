@@ -23,11 +23,11 @@ class EncryptedSharedPreferences {
   Stream<String> get stream => _decorator.listenable.stream;
 
   static Future<void> initialize(String key) async {
+    _key = key;
     _decorator = SharedPreferencesDecorator(
         preferences: await SharedPreferences.getInstance(),
         encryptor: _aes,
         key: _key!);
-    _key = key;
   }
 
   Future<bool> clear() async {
