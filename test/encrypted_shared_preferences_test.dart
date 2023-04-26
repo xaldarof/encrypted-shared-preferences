@@ -12,7 +12,7 @@ void main() async {
   test('test listen key', () async {
     sharedPref.listen(key: 'singleKey').listen(
       expectAsync1(
-            (event) {
+        (event) {
           expect(event, 'singleKey');
         },
       ),

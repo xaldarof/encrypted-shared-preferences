@@ -15,7 +15,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
     await for (final event in listenable.stream) {
       if (key != null) {
         if (event == key) {
-          yield key;
+          yield event;
         }
       } else {
         yield event;
