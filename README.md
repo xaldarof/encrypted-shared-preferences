@@ -1,8 +1,10 @@
-Shared preferences are a simple key-value storage mechanism that can be used to store small amounts of data. However, since shared preferences are stored in plain text, it is not suitable for storing sensitive information. To address this issue, you can use AES encryption to encrypt the data before saving it to shared preferences.
+Shared preferences are a simple key-value storage mechanism that can be used to store small amounts
+of data. However, since shared preferences are stored in plain text, it is not suitable for storing
+sensitive information. To address this issue, you can use AES encryption to encrypt the data before
+saving it to shared preferences.
 
-To use shared preferences with AES encryption support, you can add this package to your project as dependency.
-
-
+To use shared preferences with AES encryption support, you can add this package to your project as
+dependency.
 
 [Open pub.dev](https://pub.dev/packages/encrypt_shared_preferences)
 
@@ -35,7 +37,7 @@ void main() {
 
   await sharedPref.clear(); //true/false
 
-  sharedPref.listenKey('token').listen((event) { //event = key
+  sharedPref.listen(key: 'token').listen((event) { //event = key
     print(event);
   });
 }
