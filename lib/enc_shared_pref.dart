@@ -15,7 +15,7 @@ class EncryptedSharedPreferences {
   static final EncryptedSharedPreferences _instance =
       EncryptedSharedPreferences._();
 
-  static Future<EncryptedSharedPreferences> getInstance() async {
+  static EncryptedSharedPreferences getInstance() {
     assert(_key != null);
     return _instance;
   }
