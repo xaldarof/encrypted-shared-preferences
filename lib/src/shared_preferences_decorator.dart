@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:encrypt/encrypt.dart';
-import 'package:encrypt_shared_preferences/encryptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'encryptor.dart';
 
 class SharedPreferencesDecorator implements SharedPreferences {
   final SharedPreferences _preferences;
