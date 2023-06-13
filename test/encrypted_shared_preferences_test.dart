@@ -6,7 +6,7 @@ void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   await EncryptedSharedPreferences.initialize("123456789dlas[pdlp[asd");
-  final sharedPref = await EncryptedSharedPreferences.getInstance();
+  final sharedPref = EncryptedSharedPreferences.getInstance();
   await sharedPref.clear();
 
   test('test listen key', () async {
