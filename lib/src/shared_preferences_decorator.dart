@@ -164,7 +164,6 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return save(key, value);
   }
 
-
   SharedPreferencesDecorator({
     required SharedPreferences preferences,
     required AESEncryptor encryptor,
