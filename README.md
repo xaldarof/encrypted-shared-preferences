@@ -10,8 +10,8 @@ dependency.
 
 ```dart
 void main() {
-  EncryptedSharedPreferences.initialize(key 16 length);
-  var sharedPref = await EncryptedSharedPreferences.getInstance();
+  await EncryptedSharedPreferences.initialize(key 16 length);
+  var sharedPref = EncryptedSharedPreferences.getInstance();
 
   sharedPref.setString('user_token', 'xxxxxxxxxxxx');
 
