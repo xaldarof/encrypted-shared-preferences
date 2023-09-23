@@ -40,4 +40,8 @@ void main() {
   sharedPref.listen(key: 'token').listen((event) { //event = key
     print(event);
   });
+  
+  sharedPref.listenSet(keys: {'key1','key2','keyN}).listen((event) { //event = key
+    print(event);
+  });
 }

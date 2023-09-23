@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
-  await EncryptedSharedPreferences.initialize("123456789dlas[pdlp[asd");
+  await EncryptedSharedPreferences.initialize("1111111111111111");
   final sharedPref = EncryptedSharedPreferences.getInstance();
   await sharedPref.clear();
 
@@ -14,12 +14,26 @@ void main() async {
       expectAsync1(
         (event) {
           expect(event, 'singleKey');
+          expect(sharedPref.getString('singleKey'), 'Hi');
         },
       ),
     );
     await sharedPref.setString('singleKey', "Hi");
     await sharedPref.setString('singleKey', "Hi");
   });
+
+  test('test listen set of keys', () async {
+    sharedPref.listenSet(keys: {"keySet1", 'keySet2'}).listen(
+      expectAsync1(
+        (event) {
+          expect(event, 'keySet1');
+        },
+      ),
+    );
+    await sharedPref.setString('keySet1', "Hi");
+    await sharedPref.setString('keySet1', "Hi");
+  });
+
   test('check data string saved', () async {
     await sharedPref.setString("dataKey", "dataValue");
     expect(sharedPref.getString('dataKey'), "dataValue");

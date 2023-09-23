@@ -95,4 +95,9 @@ class EncryptedSharedPreferences {
     assert(_key != null);
     return _decorator.listen(key: key);
   }
+
+  Stream<String> listenSet({required Set<String> keys}) {
+    assert(_key != null);
+    return _decorator.listenSet(keys: keys);
+  }
 }

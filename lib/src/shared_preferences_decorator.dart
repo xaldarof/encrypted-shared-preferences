@@ -24,6 +24,15 @@ class SharedPreferencesDecorator implements SharedPreferences {
     }
   }
 
+  Stream<String> listenSet({required Set<String> keys}) async* {
+    assert(keys.isNotEmpty);
+    await for (final event in listenable.stream) {
+      if (keys.contains(event)) {
+        yield event;
+      }
+    }
+  }
+
   @override
   Future<bool> clear() {
     final cleared = _preferences.clear();
