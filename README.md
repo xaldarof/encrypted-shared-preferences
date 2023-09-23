@@ -41,7 +41,7 @@ void main() {
     print(event);
   });
   
-  sharedPref.listenSet(keys: {'key1','key2','keyN}).listen((event) { //event = key
+  sharedPref.listenSet(keys: {'key1','key2','keyN'}).listen((event) { //event = key
     print(event);
   });
 }
