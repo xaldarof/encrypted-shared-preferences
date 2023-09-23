@@ -10,28 +10,28 @@ dependency.
 
 ```dart
 void main() {
-  EncryptedSharedPreferences.initialize(key 16 length);
-  var sharedPref = await EncryptedSharedPreferences.getInstance();
+  await EncryptedSharedPreferences.initialize(key 16 length);
+  var sharedPref = EncryptedSharedPreferences.getInstance();
 
-  sharedPref.setString('user_token', 'xxxxxxxxxxxx');
+  await sharedPref.setString('user_token', 'xxxxxxxxxxxx');
 
-  await sharedPref.getString('user_token'); //xxxxxxxxxxxx
+  sharedPref.getString('user_token'); //xxxxxxxxxxxx
   
   
-  sharedPref.setInt('age', 99);
+  await sharedPref.setInt('age', 99);
   
-  await sharedPref.getInt('age'); //99
-  
-  
-  sharedPref.setDouble('pi', 3.14);
-  
-  await sharedPref.getDouble('pi'); //3.14
+  sharedPref.getInt('age'); //99
   
   
-  sharedPref.setBoolean('isPremium', true);
+  await sharedPref.setDouble('pi', 3.14);
+  
+  sharedPref.getDouble('pi'); //3.14
   
   
-  await sharedPref.getBoolean('isPremium'); //true
+  await sharedPref.setBoolean('isPremium', true);
+  
+  
+  sharedPref.getBoolean('isPremium'); //true
 
   await sharedPref.remove('user_token'); //true/false
 
