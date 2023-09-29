@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: SharedBuilder(
-          listenKeys: const {"key1", "key2"},
+          listenKeys: const {"key1", "key2"}, //Optional
           builder: (String updatedKey) {
             return Text(updatedKey);
           },

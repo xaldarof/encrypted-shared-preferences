@@ -10,7 +10,7 @@ class EncryptedSharedPreferences {
   static String? _key;
 
   static late SharedPreferencesDecorator _decorator;
-  static const AESEncryptor _aes = AESEncryptor();
+  static late Encryptor _encryptor;
 
   static final EncryptedSharedPreferences _instance =
       EncryptedSharedPreferences._();
@@ -22,11 +22,19 @@ class EncryptedSharedPreferences {
 
   Stream<String> get stream => _decorator.listenable.stream;
 
-  static Future<void> initialize(String key) async {
+  static Future<void> initialize(String key,
+      {EncryptionAlgorithm? algorithm = EncryptionAlgorithm.aes}) async {
     _key = key;
+    if (algorithm == EncryptionAlgorithm.salsa20) {
+      _encryptor = Salsa20Encryptor();
+    }
+    if (algorithm == EncryptionAlgorithm.aes) {
+      _encryptor = AESEncryptor();
+    }
+
     _decorator = SharedPreferencesDecorator(
         preferences: await SharedPreferences.getInstance(),
-        encryptor: _aes,
+        encryptor: _encryptor,
         key: _key!);
   }
 
