@@ -8,3 +8,4 @@
 * 0.0.7: listeners, stream, single listen, listen all prefs
 * 0.1.0: listen single key
 * 0.1.2: fix invoke listeners on clear(),remove()
+* 0.4.0: SharedBuilder

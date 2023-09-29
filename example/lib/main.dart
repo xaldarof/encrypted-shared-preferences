@@ -9,19 +9,15 @@ void main() async {
 
   sharedPref.getString('user_token'); //xxxxxxxxxxxx
 
-
   await sharedPref.setInt('age', 99);
 
   sharedPref.getInt('age'); //99
-
 
   await sharedPref.setDouble('pi', 3.14);
 
   sharedPref.getDouble('pi'); //3.14
 
-
   await sharedPref.setBoolean('isPremium', true);
-
 
   sharedPref.getBoolean('isPremium'); //true
 
@@ -29,12 +25,13 @@ void main() async {
 
   await sharedPref.clear(); //true/false
 
-  sharedPref.listen(key: 'token').listen((event) { //event = key
+  sharedPref.listen(key: 'token').listen((event) {
+    //event = key
     print(event);
   });
 
-  sharedPref.listenSet(keys: {'key1', 'key2', 'keyN'}).listen((
-      event) { //event = key
+  sharedPref.listenSet(keys: {'key1', 'key2', 'keyN'}).listen((event) {
+    //event = key
     print(event);
   });
 
@@ -50,21 +47,28 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SharedBuilder(child: Container()),
-        appBar: AppBar(
-          title: const Text('Native Packages'),
+        body: SharedBuilder(
+          listenKeys: const {"key1", "key2"},
+          builder: (String updatedKey) {
+            return Text(updatedKey);
+          },
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () async {
-          //
-        }),
+        appBar: AppBar(
+          title: const Text('Shared Builder Demo'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            EncryptedSharedPreferences.getInstance()
+                .setString('key1', 'dataValue');
+            Future.delayed(const Duration(seconds: 5), () {
+              EncryptedSharedPreferences.getInstance()
+                  .setString('key2', 'dataValue');
+            });
+          },
+        ),
       ),
     );
   }

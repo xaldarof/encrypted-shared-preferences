@@ -45,3 +45,31 @@ void main() {
     print(event);
   });
 }
+```
+
+
+[Shared builder] Here is example of how to use SharedBuilder widget
+
+```dart
+ @override
+ Widget build(BuildContext context) {
+   return MaterialApp(
+     home: Scaffold(
+       body: SharedBuilder(
+         listenKeys: const {"key1", "key2"},
+         builder: (String updatedKey) {
+           return Text(updatedKey);
+         },
+       ),
+       appBar: AppBar(
+         title: const Text('Shared Builder Demo'),
+       ),
+       floatingActionButton: FloatingActionButton(
+         onPressed: () async {
+           //
+         },
+       ),
+     ),
+   );
+ }
+```
