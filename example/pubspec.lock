@@ -92,10 +92,9 @@ packages:
   encrypt_shared_preferences:
     dependency: "direct main"
     description:
-      name: encrypt_shared_preferences
-      sha256: "0deb46eb47b73d9cf6ac59a2daae55f0362e5d0c6bec2f8791f1f5aa77e29a4a"
-      url: "https://pub.dev"
-    source: hosted
+      path: ".."
+      relative: true
+    source: path
     version: "0.3.7"
   fake_async:
     dependency: transitive

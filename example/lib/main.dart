@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        body: SharedBuilder(child: Container()),
         appBar: AppBar(
           title: const Text('Native Packages'),
         ),
