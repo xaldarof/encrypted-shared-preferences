@@ -2,7 +2,8 @@ import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  await EncryptedSharedPreferences.initialize('1111111111111111');
+  await EncryptedSharedPreferences.initialize('1111111111111111',
+      algorithm: EncryptionAlgorithm.salsa20);
   var sharedPref = EncryptedSharedPreferences.getInstance();
 
   await sharedPref.setString('user_token', 'xxxxxxxxxxxx');
@@ -52,8 +53,9 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: SharedBuilder(
           listenKeys: const {"key1", "key2"}, //Optional
-          builder: (String updatedKey) {
-            return Text(updatedKey);
+          builder: (String updatedKey,
+              EncryptedSharedPreferences encryptedSharedPreferences) {
+            return Text("key $updatedKey   value : ${encryptedSharedPreferences.getString(updatedKey)}");
           },
         ),
         appBar: AppBar(
@@ -63,7 +65,7 @@ class _MyAppState extends State<MyApp> {
           onPressed: () async {
             EncryptedSharedPreferences.getInstance()
                 .setString('key1', 'dataValue');
-            Future.delayed(const Duration(seconds: 5), () {
+            Future.delayed(const Duration(seconds: 3), () {
               EncryptedSharedPreferences.getInstance()
                   .setString('key2', 'dataValue');
             });

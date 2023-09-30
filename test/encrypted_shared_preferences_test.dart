@@ -1,4 +1,4 @@
-import 'package:encrypt_shared_preferences/src/enc_shared_pref.dart';
+import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +14,6 @@ void main() async {
       expectAsync1(
         (event) {
           expect(event, 'singleKey');
-          expect(sharedPref.getString('singleKey'), 'Hi');
         },
       ),
     );

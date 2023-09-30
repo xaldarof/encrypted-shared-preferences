@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'encryptor.dart';
+import 'crypto/encryptor.dart';
 
 class SharedPreferencesDecorator implements SharedPreferences {
   final SharedPreferences _preferences;
-  final AESEncryptor _encryptor;
+  final Encryptor _encryptor;
   final String _key;
   final StreamController<String> listenable =
       StreamController<String>.broadcast();
@@ -175,7 +175,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   SharedPreferencesDecorator({
     required SharedPreferences preferences,
-    required AESEncryptor encryptor,
+    required Encryptor encryptor,
     required String key,
   })  : _preferences = preferences,
         _encryptor = encryptor,

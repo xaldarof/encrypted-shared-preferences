@@ -16,21 +16,21 @@ void main() {
   await sharedPref.setString('user_token', 'xxxxxxxxxxxx');
 
   sharedPref.getString('user_token'); //xxxxxxxxxxxx
-  
-  
+
+
   await sharedPref.setInt('age', 99);
-  
+
   sharedPref.getInt('age'); //99
-  
-  
+
+
   await sharedPref.setDouble('pi', 3.14);
-  
+
   sharedPref.getDouble('pi'); //3.14
-  
-  
+
+
   await sharedPref.setBoolean('isPremium', true);
-  
-  
+
+
   sharedPref.getBoolean('isPremium'); //true
 
   await sharedPref.remove('user_token'); //true/false
@@ -40,36 +40,42 @@ void main() {
   sharedPref.listen(key: 'token').listen((event) { //event = key
     print(event);
   });
-  
-  sharedPref.listenSet(keys: {'key1','key2','keyN'}).listen((event) { //event = key
+
+  sharedPref.listenSet(keys: {'key1', 'key2', 'keyN'}).listen((event) { //event = key
     print(event);
   });
 }
 ```
 
-
 [Shared builder] Here is example of how to use SharedBuilder widget
 
 ```dart
- @override
- Widget build(BuildContext context) {
-   return MaterialApp(
-     home: Scaffold(
-       body: SharedBuilder(
-         listenKeys: const {"key1", "key2"},
-         builder: (String updatedKey) {
-           return Text(updatedKey);
-         },
-       ),
-       appBar: AppBar(
-         title: const Text('Shared Builder Demo'),
-       ),
-       floatingActionButton: FloatingActionButton(
-         onPressed: () async {
-           //
-         },
-       ),
-     ),
-   );
- }
+  @override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: SharedBuilder(
+        listenKeys: const {"key1", "key2"}, //Optional
+        builder: (String updatedKey, EncryptedSharedPreferences encryptedSharedPreferences) {
+          return Text(
+              "key $updatedKey   value : ${encryptedSharedPreferences.getString(updatedKey)}");
+        },
+      ),
+      appBar: AppBar(
+        title: const Text('Shared Builder Demo'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          EncryptedSharedPreferences.getInstance()
+              .setString('key1', 'dataValue');
+          Future.delayed(const Duration(seconds: 3), () {
+            EncryptedSharedPreferences.getInstance()
+                .setString('key2', 'dataValue');
+          });
+        },
+      ),
+    ),
+  );
+}
+
 ```

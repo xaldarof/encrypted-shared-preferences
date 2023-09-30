@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
+import 'package:encrypt_shared_preferences/src/crypto/salsa20.dart';
 import 'package:encrypt_shared_preferences/src/shared_preferences_decorator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'encryptor.dart';
+import 'crypto/encryptor.dart';
 
 class EncryptedSharedPreferences {
   EncryptedSharedPreferences._();
