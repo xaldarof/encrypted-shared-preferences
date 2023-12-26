@@ -37,11 +37,11 @@ void main() {
 
   await sharedPref.clear(); //true/false
 
-  sharedPref.listen(key: 'token').listen((event) { //event = key
+  sharedPref.observe(key: 'token').listen((event) { //event = key
     print(event);
   });
 
-  sharedPref.listenSet(keys: {'key1', 'key2', 'keyN'}).listen((event) { //event = key
+  sharedPref.observeSet(keys: {'key1', 'key2', 'keyN'}).listen((event) { //event = key
     print(event);
   });
 }
