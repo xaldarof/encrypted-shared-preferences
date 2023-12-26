@@ -53,9 +53,8 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: SharedBuilder(
           listenKeys: const {"key1", "key2"}, //Optional
-          builder: (String updatedKey,
-              EncryptedSharedPreferences encryptedSharedPreferences) {
-            return Text("key $updatedKey   value : ${encryptedSharedPreferences.getString(updatedKey)}");
+          builder: (EncryptedSharedPreferences encryptedSharedPreferences) {
+            return Text("value : ${encryptedSharedPreferences.getString("key1")}");
           },
         ),
         appBar: AppBar(
