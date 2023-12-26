@@ -12,8 +12,8 @@ class SharedBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: listenKeys != null
-          ? _preferences.listenSet(keys: listenKeys!)
-          : _preferences.listen(),
+          ? _preferences.observeSet(keys: listenKeys!)
+          : _preferences.observe(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return builder(_preferences);
       },

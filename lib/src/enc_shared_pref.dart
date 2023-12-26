@@ -101,12 +101,24 @@ class EncryptedSharedPreferences {
     return _decorator.getBool(key);
   }
 
+  @Deprecated('Use the observe() instead.')
   Stream<String> listen({String? key}) {
     assert(_key != null);
     return _decorator.listen(key: key);
   }
 
+  Stream<String> observe({String? key}) {
+    assert(_key != null);
+    return _decorator.listen(key: key);
+  }
+
+  @Deprecated('Use the observeSet() instead.')
   Stream<String> listenSet({required Set<String> keys}) {
+    assert(_key != null);
+    return _decorator.listenSet(keys: keys);
+  }
+
+  Stream<String> observeSet({required Set<String> keys}) {
     assert(_key != null);
     return _decorator.listenSet(keys: keys);
   }
