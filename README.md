@@ -37,6 +37,8 @@ void main() {
 
   await sharedPref.clear(); //true/false
 
+  await sharedPref.reload();
+
   sharedPref.observe(key: 'token').listen((event) { //event = key
     print(event);
   });
