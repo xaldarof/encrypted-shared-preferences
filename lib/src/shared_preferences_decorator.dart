@@ -112,17 +112,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  Future<void> reload() async {
-    final all = getAsMap();
-    await _preferences.clear();
-    addAll(all);
-  }
-
-  void addAll(Map<String, dynamic> map) {
-    map.forEach((key, value) {
-      _preferences.setString(key, value);
-    });
-  }
+  Future<void> reload() => _preferences.reload();
 
   Map<String, dynamic> getAsMap() {
     Map<String, dynamic> map = {};

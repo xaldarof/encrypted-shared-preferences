@@ -101,6 +101,11 @@ class EncryptedSharedPreferences {
     return _decorator.getBool(key);
   }
 
+  Future<void> reload(String key) {
+    assert(_key != null);
+    return _decorator.reload();
+  }
+
   @Deprecated('Use the observe() instead.')
   Stream<String> listen({String? key}) {
     assert(_key != null);
