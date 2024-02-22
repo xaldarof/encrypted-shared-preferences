@@ -31,6 +31,7 @@ void main() async {
       ),
     );
     await sharedPref.setString('keySet1', "Hi");
+    await sharedPref.setString('keySet1', "Hi");
   });
 
   test('check data string saved', () async {

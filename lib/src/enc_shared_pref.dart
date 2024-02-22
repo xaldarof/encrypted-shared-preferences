@@ -101,7 +101,7 @@ class EncryptedSharedPreferences {
     return _decorator.getBool(key);
   }
 
-  Future<void> reload(String key) {
+  Future<void> reload() {
     assert(_key != null);
     return _decorator.reload();
   }
