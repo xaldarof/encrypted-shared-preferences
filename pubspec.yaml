@@ -1,5 +1,6 @@
 name: encrypt_shared_preferences
-description: Encrypted SharedPreferences for critical data.
+description: When you use EncryptedSharedPreferences, the data is encrypted before being stored, and it is decrypted when retrieved. This adds an extra layer of protection to sensitive information like user credentials, API keys, or other confidential data stored in your app.
+
 version: 0.4.9
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
