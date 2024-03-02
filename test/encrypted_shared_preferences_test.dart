@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   await EncryptedSharedPreferences.initialize("1111111111111111",
       algorithm: EncryptionAlgorithm.salsa20);
@@ -18,20 +17,43 @@ void main() async {
         },
       ),
     );
-    await sharedPref.setString('singleKey', "Hi");
+    await Future.delayed(Duration.zero);
     await sharedPref.setString('singleKey', "Hi");
   });
 
+  test('test listen key with observe method', () async {
+    sharedPref.observe(key: 'singleKeyObserve').listen(
+      expectAsync1(
+        (event) {
+          expect(event, 'singleKeyObserve');
+        },
+      ),
+    );
+    await Future.delayed(Duration.zero);
+    await sharedPref.setString('singleKeyObserve', "Hi");
+  });
+
   test('test listen set of keys', () async {
-    sharedPref.listenSet(keys: {"keySet1", 'keySet2'}).listen(
+    sharedPref.observeSet(keys: {"keySet1", 'keySet2'}).listen(
       expectAsync1(
         (event) {
           expect(event, 'keySet1');
         },
       ),
     );
+    await Future.delayed(Duration.zero);
     await sharedPref.setString('keySet1', "Hi");
-    await sharedPref.setString('keySet1', "Hi");
+  });
+  test('test listen set of keys with observeSet method', () async {
+    sharedPref.observeSet(keys: {"keySet1Observe", 'keySet2Observe'}).listen(
+      expectAsync1(
+        (event) {
+          expect(event, 'keySet1Observe');
+        },
+      ),
+    );
+    await Future.delayed(Duration.zero);
+    await sharedPref.setString('keySet1Observe', "Hi");
   });
 
   test('check data string saved', () async {
@@ -68,7 +90,7 @@ void main() async {
   });
 
   test('check get all keys', () async {
-    sharedPref.setString("dataKey", "dataValue");
+    await sharedPref.setString("dataKey", "dataValue");
     var keys = await sharedPref.getKeys();
     expect(keys.length, 1);
   });

@@ -40,14 +40,14 @@ class EncryptedSharedPreferences {
         key: _key!);
   }
 
-  Future<bool> clear() async {
+  Future<bool> clear({bool notify = true}) async {
     assert(_key != null);
-    return _decorator.clear();
+    return _decorator.clear(notify: notify);
   }
 
-  Future<bool> remove(String key) async {
+  Future<bool> remove(String key, {bool notify = true}) async {
     assert(_key != null);
-    _decorator.remove(key);
+    _decorator.remove(key, notify: notify);
     return true;
   }
 
@@ -61,24 +61,28 @@ class EncryptedSharedPreferences {
     return _decorator.get(key);
   }
 
-  Future<bool> setString(String dataKey, String? dataValue) async {
+  Future<bool> setString(String dataKey, String? dataValue,
+      {bool notify = true}) async {
     assert(_key != null);
-    return _decorator.setString(dataKey, dataValue);
+    return _decorator.setString(dataKey, dataValue, notify: notify);
   }
 
-  Future<bool> setInt(String dataKey, int? dataValue) async {
+  Future<bool> setInt(String dataKey, int? dataValue,
+      {bool notify = true}) async {
     assert(_key != null);
-    return _decorator.setInt(dataKey, dataValue);
+    return _decorator.setInt(dataKey, dataValue, notify: notify);
   }
 
-  Future<bool> setDouble(String dataKey, double? dataValue) async {
+  Future<bool> setDouble(String dataKey, double? dataValue,
+      {bool notify = true}) async {
     assert(_key != null);
-    return _decorator.setDouble(dataKey, dataValue);
+    return _decorator.setDouble(dataKey, dataValue, notify: notify);
   }
 
-  Future<bool> setBoolean(String dataKey, bool? dataValue) async {
+  Future<bool> setBoolean(String dataKey, bool? dataValue,
+      {bool notify = true}) async {
     assert(_key != null);
-    return _decorator.setBool(dataKey, dataValue);
+    return _decorator.setBool(dataKey, dataValue, notify: notify);
   }
 
   String? getString(String key) {

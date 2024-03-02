@@ -34,9 +34,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  Future<bool> clear() {
+  Future<bool> clear({bool notify = true}) {
     final cleared = _preferences.clear();
-    listenable.add('');
+    _notify('', notify);
     return cleared;
   }
 
@@ -122,34 +122,38 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return map;
   }
 
+  _notify(String value, bool notify) {
+    if (notify) listenable.add(value);
+  }
+
   @override
-  Future<bool> remove(String key) {
-    listenable.add(key);
+  Future<bool> remove(String key, {bool notify = true}) {
+    _notify(key, notify);
     return _preferences.remove(_encryptor.encrypt(_key, key).base64);
   }
 
   @override
-  Future<bool> setBool(String key, bool? value) {
-    return save(key, value);
+  Future<bool> setBool(String key, bool? value, {bool notify = true}) {
+    return save(key, value, notify: notify);
   }
 
   @override
-  Future<bool> setDouble(String key, double? value) {
-    return save(key, value);
+  Future<bool> setDouble(String key, double? value, {bool notify = true}) {
+    return save(key, value, notify: notify);
   }
 
   @override
-  Future<bool> setInt(String key, int? value) {
-    return save(key, value);
+  Future<bool> setInt(String key, int? value, {bool notify = true}) {
+    return save(key, value, notify: notify);
   }
 
   @override
-  Future<bool> setString(String key, String? value) {
-    return save(key, value);
+  Future<bool> setString(String key, String? value, {bool notify = true}) {
+    return save(key, value, notify: notify);
   }
 
-  Future<bool> save(String key, dynamic value) {
-    listenable.add(key);
+  Future<bool> save(String key, dynamic value, {required bool notify}) {
+    _notify(key, notify);
     if (value != null) {
       return _preferences.setString(_encryptor.encrypt(_key, key).base64,
           _encryptor.encrypt(_key, value.toString()).base64);
@@ -159,8 +163,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  Future<bool> setStringList(String key, List<String>? value) {
-    return save(key, value);
+  Future<bool> setStringList(String key, List<String>? value,
+      {bool notify = true}) {
+    return save(key, value, notify: notify);
   }
 
   SharedPreferencesDecorator({
