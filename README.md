@@ -9,41 +9,39 @@ dependency.
 [Open pub.dev](https://pub.dev/packages/encrypt_shared_preferences)
 
 ```dart
-void main() {
-  await EncryptedSharedPreferences.initialize(key 16 length);
+void main() async {
+  await EncryptedSharedPreferences.initialize(keyLength: 16);
   var sharedPref = EncryptedSharedPreferences.getInstance();
 
-  await sharedPref.setString('user_token', 'xxxxxxxxxxxx');
+  await sharedPref.setString('user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
 
   sharedPref.getString('user_token'); //xxxxxxxxxxxx
 
-
-  await sharedPref.setInt('age', 99);
+  await sharedPref.setInt('age', 99, notify: true); //notify = true by default
 
   sharedPref.getInt('age'); //99
 
-
-  await sharedPref.setDouble('pi', 3.14);
+  await sharedPref.setDouble('pi', 3.14, notify: true); //notify = true by default
 
   sharedPref.getDouble('pi'); //3.14
 
-
-  await sharedPref.setBoolean('isPremium', true);
-
+  await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
 
   sharedPref.getBoolean('isPremium'); //true
 
-  await sharedPref.remove('user_token'); //true/false
+  await sharedPref.remove('user_token', notify: true); //notify = true by default
 
-  await sharedPref.clear(); //true/false
+  await sharedPref.clear(notify: true); //notify = true by default
 
   await sharedPref.reload();
 
-  sharedPref.observe(key: 'token').listen((event) { //event = key
+  sharedPref.observe(key: 'token').listen((event) {
+    // event = key
     print(event);
   });
 
-  sharedPref.observeSet(keys: {'key1', 'key2', 'keyN'}).listen((event) { //event = key
+  sharedPref.observeSet(keys: {'key1', 'key2', 'keyN'}).listen((event) {
+    // event = key
     print(event);
   });
 }
