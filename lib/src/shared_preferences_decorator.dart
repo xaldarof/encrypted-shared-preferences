@@ -96,6 +96,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
   String? getString(String key) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key).base64);
     if (value != null) {
+      if (value == "") {
+        return "";
+      }
       return _encryptor.decrypt(_key, Encrypted.fromBase64(value));
     } else {
       return null;
@@ -155,8 +158,11 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Future<bool> save(String key, dynamic value, {required bool notify}) {
     _notify(key, notify);
     if (value != null) {
-      return _preferences.setString(_encryptor.encrypt(_key, key).base64,
-          _encryptor.encrypt(_key, value.toString()).base64);
+      var enKey = _encryptor.encrypt(_key, key).base64;
+      if (value == "") {
+        return _preferences.setString(enKey, value);
+      }
+      return _preferences.setString(enKey, _encryptor.encrypt(_key, value.toString()).base64);
     } else {
       return remove(key);
     }

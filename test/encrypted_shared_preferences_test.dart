@@ -61,6 +61,11 @@ void main() async {
     expect(sharedPref.getString('dataKey'), "dataValue");
   });
 
+  test('check empty string saved', () async {
+    await sharedPref.setString("keyDataEmpty", "");
+    expect(sharedPref.getString("keyDataEmpty"), "");
+  });
+
   test('check data int saved', () async {
     await sharedPref.setInt("age", 99);
     expect(sharedPref.getInt('age'), 99);
