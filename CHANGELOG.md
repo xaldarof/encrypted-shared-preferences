@@ -9,3 +9,5 @@
 * 0.1.0: listen single key
 * 0.1.2: fix invoke listeners on clear(),remove()
 * 0.4.0: SharedBuilder
+* 0.5.3: Fix save empty string error
+* 0.5.5: Remove Salsa20 algorithm

@@ -2,8 +2,7 @@ import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  await EncryptedSharedPreferences.initialize('1111111111111111',
-      algorithm: EncryptionAlgorithm.salsa20);
+  await EncryptedSharedPreferences.initialize('1111111111111111');
 
   runApp(const MyApp());
 }

@@ -4,8 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   SharedPreferences.setMockInitialValues({});
-  await EncryptedSharedPreferences.initialize("1111111111111111",
-      algorithm: EncryptionAlgorithm.salsa20);
+  await EncryptedSharedPreferences.initialize("1111111111111111");
   final sharedPref = EncryptedSharedPreferences.getInstance();
   await sharedPref.clear();
 
