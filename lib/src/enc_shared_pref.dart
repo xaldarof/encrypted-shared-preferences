@@ -39,12 +39,12 @@ class EncryptedSharedPreferences {
     return true;
   }
 
-  Future<Set<String>> getKeys() async {
+  Set<String> getKeys() {
     assert(_key != null);
     return _decorator.getKeys();
   }
 
-  dynamic get(String key) {
+  String? get(String key) {
     assert(_key != null);
     return _decorator.get(key);
   }

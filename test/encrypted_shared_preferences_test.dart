@@ -98,4 +98,23 @@ void main() async {
     var keys = await sharedPref.getKeys();
     expect(keys.length, 1);
   });
+
+  test('read value of any type', () async {
+    await sharedPref.clear();
+    expect(sharedPref.getKeys().length, 0);
+    //set
+    await sharedPref.setString("valueKey1", "dataValue");
+    await sharedPref.setInt("valueKey2", 100);
+    await sharedPref.setDouble("valueKey3", 101.0);
+    await sharedPref.setBoolean("valueKey4", true);
+    //get
+    String valueStr = sharedPref.get("valueKey1") as String;
+    int valueInt =  int.parse(sharedPref.get("valueKey2").toString());
+    double valueDouble = double.parse(sharedPref.get("valueKey3").toString());
+    bool valueBool =  bool.parse(sharedPref.get("valueKey4").toString());
+    expect(valueStr, "dataValue");
+    expect(valueInt, 100);
+    expect(valueBool, true);
+    expect(valueDouble, 101.0);
+  });
 }

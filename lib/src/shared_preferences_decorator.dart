@@ -48,9 +48,12 @@ class SharedPreferencesDecorator implements SharedPreferences {
       _preferences.containsKey(_encryptor.encrypt(_key, key).base64);
 
   @override
-  Object? get(String key) {
-    // TODO: implement get
-    throw UnimplementedError();
+  String? get(String key) {
+    final cacheValue = _preferences.get(_encryptor.encrypt(_key, key).base64);
+    if (cacheValue == null) return null;
+    final value =
+        _encryptor.decrypt(_key, Encrypted.fromBase64(cacheValue.toString()));
+    return value;
   }
 
   @override
@@ -162,7 +165,8 @@ class SharedPreferencesDecorator implements SharedPreferences {
       if (value == "") {
         return _preferences.setString(enKey, value);
       }
-      return _preferences.setString(enKey, _encryptor.encrypt(_key, value.toString()).base64);
+      return _preferences.setString(
+          enKey, _encryptor.encrypt(_key, value.toString()).base64);
     } else {
       return remove(key);
     }
