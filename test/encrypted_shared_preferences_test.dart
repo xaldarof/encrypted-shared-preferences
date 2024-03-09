@@ -111,7 +111,7 @@ void main() async {
     String valueStr = sharedPref.get("valueKey1") as String;
     int valueInt =  int.parse(sharedPref.get("valueKey2").toString());
     double valueDouble = double.parse(sharedPref.get("valueKey3").toString());
-    bool valueBool =  bool.parse(sharedPref.get("valueKey4").toString());
+    bool? valueBool =  sharedPref.get("valueKey4").toString() == "true";
     expect(valueStr, "dataValue");
     expect(valueInt, 100);
     expect(valueBool, true);
