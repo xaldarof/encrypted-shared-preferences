@@ -1,6 +1,6 @@
 name: encrypt_shared_preferences
 description: This package adds extra layer of protection to sensitive information like user credentials, API keys, or other confidential data stored in your app.
-version: 0.5.8
+version: 0.5.9
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
 environment:

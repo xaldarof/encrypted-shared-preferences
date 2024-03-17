@@ -11,7 +11,7 @@ class EncryptedSharedPreferences {
   static late SharedPreferencesDecorator _decorator;
 
   static final EncryptedSharedPreferences _instance =
-  EncryptedSharedPreferences._();
+      EncryptedSharedPreferences._();
 
   static EncryptedSharedPreferences getInstance() {
     assert(_key != null);
