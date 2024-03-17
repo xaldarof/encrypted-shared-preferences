@@ -95,7 +95,7 @@ void main() async {
 
   test('check get all keys', () async {
     await sharedPref.setString("dataKey", "dataValue");
-    var keys = await sharedPref.getKeys();
+    var keys = sharedPref.getKeys();
     expect(keys.length, 1);
   });
 
@@ -109,9 +109,9 @@ void main() async {
     await sharedPref.setBoolean("valueKey4", true);
     //get
     String valueStr = sharedPref.get("valueKey1") as String;
-    int valueInt =  int.parse(sharedPref.get("valueKey2").toString());
+    int valueInt = int.parse(sharedPref.get("valueKey2").toString());
     double valueDouble = double.parse(sharedPref.get("valueKey3").toString());
-    bool? valueBool =  sharedPref.get("valueKey4").toString() == "true";
+    bool? valueBool = sharedPref.get("valueKey4").toString() == "true";
     expect(valueStr, "dataValue");
     expect(valueInt, 100);
     expect(valueBool, true);

@@ -1,8 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
 
-
-
 class AESEncryptor extends Encryptor {
   @override
   Encrypted encrypt(String key, String plainText) {

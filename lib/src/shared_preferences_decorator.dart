@@ -40,8 +40,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return cleared;
   }
 
+  @Deprecated("This method is now a no-op, and should no longer be called.")
   @override
-  Future<bool> commit() => _preferences.commit();
+  Future<bool> commit() => Future.value(true);
 
   @override
   bool containsKey(String key) =>
