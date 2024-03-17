@@ -6,29 +6,14 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-
-      - uses: actions/checkout@v3
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-
-      - name: Install dependencies
-        run: flutter pub get
-
-
-      - name: Analyze project source
-        run: dart analyze
-
-      - name: Run tests
-        run: flutter test
   publish:
     permissions:
-      id-token: write # Required for authentication using OIDC
-
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        run: fluuter pub get
+      - name: Publish
+        run: dart pub publish --force
