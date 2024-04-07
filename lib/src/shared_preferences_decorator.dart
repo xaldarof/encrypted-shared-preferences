@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'crypto/encryptor.dart';
 
 class SharedPreferencesDecorator implements SharedPreferences {
   final SharedPreferences _preferences;
-  final Encryptor _encryptor;
+  final IEncryptor _encryptor;
   final String _key;
   final StreamController<String> listenable =
       StreamController<String>.broadcast();
@@ -46,22 +45,22 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   bool containsKey(String key) =>
-      _preferences.containsKey(_encryptor.encrypt(_key, key).base64);
+      _preferences.containsKey(_encryptor.encrypt(_key, key));
 
   @override
   String? get(String key) {
-    final cacheValue = _preferences.get(_encryptor.encrypt(_key, key).base64);
+    final cacheValue = _preferences.get(_encryptor.encrypt(_key, key));
     if (cacheValue == null) return null;
     final value =
-        _encryptor.decrypt(_key, Encrypted.fromBase64(cacheValue.toString()));
+        _encryptor.decrypt(_key, cacheValue.toString());
     return value;
   }
 
   @override
   bool? getBool(String key) {
-    final value = _preferences.getString(_encryptor.encrypt(_key, key).base64);
+    final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
-      return _encryptor.decrypt(_key, Encrypted.fromBase64(value)) == "true";
+      return _encryptor.decrypt(_key, value) == "true";
     } else {
       return null;
     }
@@ -69,10 +68,10 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   double? getDouble(String key) {
-    final value = _preferences.getString(_encryptor.encrypt(_key, key).base64);
+    final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
       return double.parse(
-          _encryptor.decrypt(_key, Encrypted.fromBase64(value)));
+          _encryptor.decrypt(_key, value));
     } else {
       return null;
     }
@@ -80,9 +79,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   int? getInt(String key) {
-    final value = _preferences.getString(_encryptor.encrypt(_key, key).base64);
+    final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
-      return int.parse(_encryptor.decrypt(_key, Encrypted.fromBase64(value)));
+      return int.parse(_encryptor.decrypt(_key, value));
     } else {
       return null;
     }
@@ -92,18 +91,18 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Set<String> getKeys() {
     final set = _preferences.getKeys();
     return set
-        .map((e) => _encryptor.decrypt(_key, Encrypted.fromBase64(e)))
+        .map((e) => _encryptor.decrypt(_key, e))
         .toSet();
   }
 
   @override
   String? getString(String key) {
-    final value = _preferences.getString(_encryptor.encrypt(_key, key).base64);
+    final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
       if (value == "") {
         return "";
       }
-      return _encryptor.decrypt(_key, Encrypted.fromBase64(value));
+      return _encryptor.decrypt(_key, value);
     } else {
       return null;
     }
@@ -112,9 +111,9 @@ class SharedPreferencesDecorator implements SharedPreferences {
   @override
   List<String>? getStringList(String key) {
     final set =
-        _preferences.getStringList(_encryptor.encrypt(_key, key).base64);
+        _preferences.getStringList(_encryptor.encrypt(_key, key));
     return set
-        ?.map((e) => _encryptor.decrypt(_key, Encrypted.fromBase64(e)))
+        ?.map((e) => _encryptor.decrypt(_key, e))
         .toList();
   }
 
@@ -136,7 +135,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   @override
   Future<bool> remove(String key, {bool notify = true}) {
     _notify(key, notify);
-    return _preferences.remove(_encryptor.encrypt(_key, key).base64);
+    return _preferences.remove(_encryptor.encrypt(_key, key));
   }
 
   @override
@@ -162,12 +161,12 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Future<bool> save(String key, dynamic value, {required bool notify}) {
     _notify(key, notify);
     if (value != null) {
-      var enKey = _encryptor.encrypt(_key, key).base64;
+      var enKey = _encryptor.encrypt(_key, key);
       if (value == "") {
         return _preferences.setString(enKey, value);
       }
       return _preferences.setString(
-          enKey, _encryptor.encrypt(_key, value.toString()).base64);
+          enKey, _encryptor.encrypt(_key, value.toString()));
     } else {
       return remove(key);
     }
@@ -181,7 +180,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   SharedPreferencesDecorator({
     required SharedPreferences preferences,
-    required Encryptor encryptor,
+    required IEncryptor encryptor,
     required String key,
   })  : _preferences = preferences,
         _encryptor = encryptor,

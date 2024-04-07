@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
+import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/shared_preferences_decorator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,11 +23,11 @@ class EncryptedSharedPreferences {
   Stream<String> get stream => _decorator.listenable.stream;
 
   /// Initialize the EncryptedSharedPreferences with the provided encryption key.
-  static Future<void> initialize(String key) async {
+  static Future<void> initialize(String key, {IEncryptor? encryptor}) async {
     _key = key;
     _decorator = SharedPreferencesDecorator(
         preferences: await SharedPreferences.getInstance(),
-        encryptor: AESEncryptor(),
+        encryptor: encryptor ?? AESEncryptor(),
         key: _key!);
   }
 

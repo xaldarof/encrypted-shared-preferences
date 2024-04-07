@@ -1,8 +1,25 @@
+import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
+class CustomEncryptorAlgorithm implements IEncryptor {
+  @override
+  String decrypt(String key, String encryptedDataBase64) {
+    const decryptedData = "";
+
+    return decryptedData;
+  }
+
+  @override
+  String encrypt(String key, String plainText) {
+    const encryptedTextBase64 = "";
+    return encryptedTextBase64;
+  }
+}
+
 void main() async {
-  await EncryptedSharedPreferences.initialize('1111111111111111');
+  await EncryptedSharedPreferences.initialize('1111111111111111',
+      encryptor: CustomEncryptorAlgorithm());
 
   runApp(const MyApp());
 }

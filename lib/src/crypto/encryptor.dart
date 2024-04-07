@@ -1,7 +1,7 @@
 import 'package:encrypt/encrypt.dart';
 
-abstract class Encryptor {
-  Encrypted encrypt(String key, String plainText);
+abstract class IEncryptor {
+  String encrypt(String key, String plainText);
 
-  String decrypt(String key, Encrypted encryptedData);
+  String decrypt(String key, String encryptedDataBase64);
 }

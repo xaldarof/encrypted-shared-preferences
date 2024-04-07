@@ -10,7 +10,8 @@ dependency.
 
 ```dart
 void main() async {
-  await EncryptedSharedPreferences.initialize(keyLength: 16);
+  final key = "";
+  await EncryptedSharedPreferences.initialize(key: key);
   var sharedPref = EncryptedSharedPreferences.getInstance();
 
   await sharedPref.setString('user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
@@ -76,4 +77,26 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+```
+
+Also you can add custom external encryptor 
+
+```dart
+class CustomEncryptor extends IEncryptor {
+  @override
+  String decrypt(String key, String encryptedDataBase64) {
+    //encryption logic
+  }
+
+  @override
+  String encrypt(String key, String plainText) {
+    //decryption logic
+  }
+}
+
+void main() {
+  final key = "";
+  await EncryptedSharedPreferences.initialize(key: key,encryptor: CustomEncryptor());
+  var sharedPref = EncryptedSharedPreferences.getInstance();
+}
 ```
