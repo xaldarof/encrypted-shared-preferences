@@ -1,5 +1,3 @@
-import 'package:encrypt/encrypt.dart';
-
 abstract class IEncryptor {
   String encrypt(String key, String plainText);
 

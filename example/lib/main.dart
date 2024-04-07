@@ -1,4 +1,3 @@
-import 'package:encrypt/encrypt.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
