@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomEncryptorAlgorithm implements IEncryptor {
   @override
-  String decrypt(String key, String encryptedDataBase64) {
+  String decrypt(String key, String encryptedData) {
     const decryptedData = "";
 
     return decryptedData;

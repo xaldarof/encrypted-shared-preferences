@@ -84,7 +84,7 @@ Also you can add custom external encryptor
 ```dart
 class CustomEncryptor extends IEncryptor {
   @override
-  String decrypt(String key, String encryptedDataBase64) {
+  String decrypt(String key, String encryptedData) {
     //encryption logic
   }
 

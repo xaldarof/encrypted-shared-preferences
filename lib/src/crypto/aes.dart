@@ -14,12 +14,12 @@ class AESEncryptor extends IEncryptor {
   }
 
   @override
-  String decrypt(String key, String encryptedDataBase64) {
+  String decrypt(String key, String encryptedData) {
     assert(key.length == 16);
     final cipherKey = Key.fromUtf8(key);
     final encryptService = Encrypter(AES(cipherKey));
     final initVector = IV.fromUtf8(key);
 
-    return encryptService.decrypt(Encrypted.fromBase64(encryptedDataBase64), iv: initVector);
+    return encryptService.decrypt(Encrypted.fromBase64(encryptedData), iv: initVector);
   }
 }
