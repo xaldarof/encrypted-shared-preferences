@@ -14,7 +14,8 @@ void main() async {
   await EncryptedSharedPreferences.initialize(key: key);
   var sharedPref = EncryptedSharedPreferences.getInstance();
 
-  await sharedPref.setString('user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
+  await sharedPref.setString(
+      'user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
 
   sharedPref.getString('user_token'); //xxxxxxxxxxxx
 
@@ -79,24 +80,24 @@ class _MyAppState extends State<MyApp> {
 
 ```
 
-Also you can add custom external encryptor 
+Also you can add custom external encryptor
 
 ```dart
 class CustomEncryptor extends IEncryptor {
   @override
   String decrypt(String key, String encryptedData) {
-    //encryption logic
+    //decryption logic
   }
 
   @override
   String encrypt(String key, String plainText) {
-    //decryption logic
+    //encryption logic
   }
 }
 
 void main() {
   final key = "";
-  await EncryptedSharedPreferences.initialize(key: key,encryptor: CustomEncryptor());
+  await EncryptedSharedPreferences.initialize(key: key, encryptor: CustomEncryptor());
   var sharedPref = EncryptedSharedPreferences.getInstance();
 }
 ```
