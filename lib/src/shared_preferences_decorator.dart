@@ -51,8 +51,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   String? get(String key) {
     final cacheValue = _preferences.get(_encryptor.encrypt(_key, key));
     if (cacheValue == null) return null;
-    final value =
-        _encryptor.decrypt(_key, cacheValue.toString());
+    final value = _encryptor.decrypt(_key, cacheValue.toString());
     return value;
   }
 
@@ -70,8 +69,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   double? getDouble(String key) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
-      return double.parse(
-          _encryptor.decrypt(_key, value));
+      return double.parse(_encryptor.decrypt(_key, value));
     } else {
       return null;
     }
@@ -90,9 +88,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   @override
   Set<String> getKeys() {
     final set = _preferences.getKeys();
-    return set
-        .map((e) => _encryptor.decrypt(_key, e))
-        .toSet();
+    return set.map((e) => _encryptor.decrypt(_key, e)).toSet();
   }
 
   @override
@@ -110,11 +106,8 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   List<String>? getStringList(String key) {
-    final set =
-        _preferences.getStringList(_encryptor.encrypt(_key, key));
-    return set
-        ?.map((e) => _encryptor.decrypt(_key, e))
-        .toList();
+    final set = _preferences.getStringList(_encryptor.encrypt(_key, key));
+    return set?.map((e) => _encryptor.decrypt(_key, e)).toList();
   }
 
   @override

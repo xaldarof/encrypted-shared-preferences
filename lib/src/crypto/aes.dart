@@ -20,6 +20,7 @@ class AESEncryptor extends IEncryptor {
     final encryptService = Encrypter(AES(cipherKey));
     final initVector = IV.fromUtf8(key);
 
-    return encryptService.decrypt(Encrypted.fromBase64(encryptedData), iv: initVector);
+    return encryptService.decrypt(Encrypted.fromBase64(encryptedData),
+        iv: initVector);
   }
 }
