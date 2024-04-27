@@ -13,3 +13,4 @@
 * 0.5.5: Remove Salsa20 algorithm
 * 0.5.6: Add temporary solution for get() method, remove unnecessary Future from getKeys()
 * 0.5.7: Add docs for methods, deprecate commit()
+* 0.7.0: Add batch saving
