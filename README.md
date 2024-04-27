@@ -101,3 +101,18 @@ void main() {
   var sharedPref = EncryptedSharedPreferences.getInstance();
 }
 ```
+
+
+Save using batch(Experimental)
+
+
+```dart
+    await EncryptedSharedPreferences.getInstance().batch((batch) async {
+      //await all async preference operations
+      await batch.setString('dataKey1', 'dataValue1');
+      await batch.setString('dataKey2', 'dataValue2');
+      await batch.setString('dataKey3', 'dataValue3');
+
+      return Future(() => true);
+    });
+```

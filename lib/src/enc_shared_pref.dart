@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/shared_preferences_decorator.dart';
@@ -139,4 +140,20 @@ class EncryptedSharedPreferences {
     assert(_key != null);
     return _decorator.listenSet(keys: keys);
   }
+
+  /// Notify listeners
+  Stream<String> notifyObservers() {
+    assert(_key != null);
+    return _decorator.notifyObservers();
+  }
+
+  ///Save map
+  Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) =>
+      _decorator.setMap(map);
+
+  ///Save with batch
+  Future<void> batch(
+          Future<bool> Function(BatchSharedPreferences batch) invoke,
+          {bool notify = true}) =>
+      _decorator.batch(invoke, notify: notify);
 }

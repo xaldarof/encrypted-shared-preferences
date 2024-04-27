@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:encrypt_shared_preferences/src/batch.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'crypto/encryptor.dart';
@@ -121,8 +123,8 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return map;
   }
 
-  _notify(String value, bool notify) {
-    if (notify) listenable.add(value);
+  _notify(String key, bool notify) {
+    if (notify) listenable.add(key);
   }
 
   @override
@@ -178,4 +180,26 @@ class SharedPreferencesDecorator implements SharedPreferences {
   })  : _preferences = preferences,
         _encryptor = encryptor,
         _key = key;
+
+  notifyObservers() {
+    _notify('', true);
+  }
+
+  Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) async {
+    await Future.forEach(map.keys.toList(), (element) async {
+      await _preferences.setString(element, map[element]);
+    });
+    _notify('', notify);
+  }
+
+  Future<void> batch(
+      Future<bool> Function(BatchSharedPreferences batch) invoke,
+      {bool notify = true}) async {
+    BatchSharedPreferences batchSharedPreferences = BatchSharedPreferences();
+    if (await invoke(batchSharedPreferences) == true) {
+      await setMap(batchSharedPreferences.batch, notify: notify);
+    } else {
+      if (kDebugMode) print('Batch return false');
+    }
+  }
 }
