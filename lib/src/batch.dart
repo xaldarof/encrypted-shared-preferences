@@ -1,5 +1,5 @@
 class BatchSharedPreferences {
-  final Map<String, dynamic> _batch = {};
+  late final Map<String, dynamic> _batch;
 
   Map<String, dynamic> get batch => _batch;
 
@@ -57,4 +57,8 @@ class BatchSharedPreferences {
     _batch[key] = value;
     return true;
   }
+
+  BatchSharedPreferences({
+    required Map<String, dynamic> batch,
+  }) : _batch = batch;
 }

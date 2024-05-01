@@ -187,15 +187,25 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) async {
     await Future.forEach(map.keys.toList(), (element) async {
-      await _preferences.setString(element, map[element]);
+      final key = _encryptor.encrypt(_key, element);
+      final value = _encryptor.encrypt(_key, map[element]);
+      await _preferences.setString(key, value);
     });
     _notify('', notify);
   }
 
-  Future<void> batch(
-      Future<bool> Function(BatchSharedPreferences batch) invoke,
+  Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
       {bool notify = true}) async {
-    BatchSharedPreferences batchSharedPreferences = BatchSharedPreferences();
+    final Map<String, dynamic> map = {};
+    final keys = _preferences.getKeys();
+    for (var element in keys) {
+      final value =
+          _encryptor.decrypt(_key, _preferences.get(element).toString());
+      map[_encryptor.decrypt(_key, element)] = value;
+    }
+
+    BatchSharedPreferences batchSharedPreferences =
+        BatchSharedPreferences(batch: map);
     if (await invoke(batchSharedPreferences) == true) {
       await setMap(batchSharedPreferences.batch, notify: notify);
     } else {
