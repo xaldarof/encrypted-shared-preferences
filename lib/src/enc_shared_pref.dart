@@ -32,10 +32,18 @@ class EncryptedSharedPreferences {
         key: _key!);
   }
 
-  /// Clear all key-value pairs from SharedPreferences.
+  /// Clear all key-valure pairs from SharedPreferences.
   Future<bool> clear({bool notify = true}) async {
     assert(_key != null);
     return _decorator.clear(notify: notify);
+  }
+
+  /// Clear all key-value pairs from SharedPreferences.
+  Future<bool> removeWhere(
+      {bool notify = true,
+      required Function(String key, String value) condition}) async {
+    assert(_key != null);
+    return _decorator.removeWhere(condition: condition, notify: notify);
   }
 
   /// Remove the value associated with the specified key from SharedPreferences.
@@ -152,8 +160,7 @@ class EncryptedSharedPreferences {
       _decorator.setMap(map);
 
   ///Save with batch
-  Future<void> batch(
-          Future<bool> Function(BatchSharedPreferences batch) invoke,
+  Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
           {bool notify = true}) =>
       _decorator.batch(invoke, notify: notify);
 }

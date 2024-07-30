@@ -133,6 +133,22 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return _preferences.remove(_encryptor.encrypt(_key, key));
   }
 
+  Future<bool> removeWhere(
+      {bool notify = true,
+      required Function(String key, String value) condition}) async {
+    try {
+      await Future.forEach(getKeys(), (key) async {
+        if (condition(key, get(key)!)) {
+          await _preferences.remove(_encryptor.encrypt(_key, key));
+        }
+      });
+      _notify('', notify);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Future<bool> setBool(String key, bool? value, {bool notify = true}) {
     return save(key, value, notify: notify);

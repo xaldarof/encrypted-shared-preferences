@@ -117,4 +117,17 @@ void main() async {
     expect(valueBool, true);
     expect(valueDouble, 101.0);
   });
+
+  test('test remove where', () async {
+    await sharedPref.setString('key1', "value1");
+    await sharedPref.setString('key2', "value2");
+    await sharedPref.setString('key3', "value3");
+    final saveKeySet = {
+      "key1"
+          "key3"
+    };
+    await sharedPref.removeWhere(
+        condition: (key, value) => saveKeySet.contains(key));
+    expect(sharedPref.getString("key2"), "value2");
+  });
 }
