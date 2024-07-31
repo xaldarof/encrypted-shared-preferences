@@ -135,11 +135,15 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   Future<bool> removeWhere(
       {bool notify = true,
+      bool notifyEach = false,
       required Function(String key, String value) condition}) async {
     try {
       await Future.forEach(getKeys(), (key) async {
         if (condition(key, get(key)!)) {
           await _preferences.remove(_encryptor.encrypt(_key, key));
+          if (notifyEach) {
+            _notify(key, true);
+          }
         }
       });
       _notify('', notify);

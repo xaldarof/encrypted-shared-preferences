@@ -36,12 +36,13 @@ void main() async {
   await sharedPref.clear(notify: true); //notify = true by default
 
   await sharedPref.reload();
-  
+
   final badKeys = {
     "key1"
-    "key2"
+        "key2"
   };
-  await sharedPref.removeWhere((key,value) => badKeys.contains(key));
+  await sharedPref.removeWhere((key, value) => badKeys.contains(key),
+      notifyEach: true); //notifyEach:true for notifying for each key update
 
   sharedPref.observe(key: 'token').listen((event) {
     // event = key
