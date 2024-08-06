@@ -50,40 +50,40 @@ class SharedPreferencesDecorator implements SharedPreferences {
       _preferences.containsKey(_encryptor.encrypt(_key, key));
 
   @override
-  String? get(String key) {
+  String? get(String key, {String? defaultValue}) {
     final cacheValue = _preferences.get(_encryptor.encrypt(_key, key));
-    if (cacheValue == null) return null;
+    if (cacheValue == null) return defaultValue;
     final value = _encryptor.decrypt(_key, cacheValue.toString());
     return value;
   }
 
   @override
-  bool? getBool(String key) {
+  bool? getBool(String key, {bool? defaultValue}) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
       return _encryptor.decrypt(_key, value) == "true";
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
   @override
-  double? getDouble(String key) {
+  double? getDouble(String key, {double? defaultValue}) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
       return double.parse(_encryptor.decrypt(_key, value));
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
   @override
-  int? getInt(String key) {
+  int? getInt(String key, {int? defaultValue}) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
       return int.parse(_encryptor.decrypt(_key, value));
     } else {
-      return null;
+      return defaultValue;
     }
   }
 
@@ -94,15 +94,12 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  String? getString(String key) {
+  String? getString(String key, {String? defaultValue}) {
     final value = _preferences.getString(_encryptor.encrypt(_key, key));
     if (value != null) {
-      if (value == "") {
-        return "";
-      }
       return _encryptor.decrypt(_key, value);
     } else {
-      return null;
+      return defaultValue;
     }
   }
 

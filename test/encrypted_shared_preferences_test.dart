@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,5 +131,20 @@ void main() async {
     await sharedPref.removeWhere(
         condition: (key, value) => saveKeySet.contains(key));
     expect(sharedPref.getString("key2"), "value2");
+  });
+
+  test('test defaultValue', () {
+    final strValue =
+        sharedPref.getString("key10", defaultValue: "defaultKey10Value");
+    final intValue = sharedPref.getInt("key11", defaultValue: 1011);
+    final doubleValue = sharedPref.getDouble("key12", defaultValue: 1.23);
+    final boolValue = sharedPref.getBoolean("key13", defaultValue: false);
+    final getValue = sharedPref.get("key13", defaultValue: "defaultKey13Value");
+
+    expect(strValue, "defaultKey10Value");
+    expect(intValue, 1011);
+    expect(doubleValue, 1.23);
+    expect(boolValue, false);
+    expect(getValue, "defaultKey13Value");
   });
 }

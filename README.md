@@ -21,7 +21,7 @@ void main() async {
 
   await sharedPref.setInt('age', 99, notify: true); //notify = true by default
 
-  sharedPref.getInt('age'); //99
+  sharedPref.getInt('age', defaultValue: 1001); //99
 
   await sharedPref.setDouble('pi', 3.14, notify: true); //notify = true by default
 

@@ -16,3 +16,4 @@
 * 0.7.0: Add batch saving
 * 0.7.3: Add removeWhere method
 * 0.7.4: Add removeWhere method param notifyEach
+* 0.7.5: Add defaultValue param

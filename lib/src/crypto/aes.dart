@@ -4,6 +4,7 @@ import 'package:encrypt_shared_preferences/provider.dart';
 class AESEncryptor extends IEncryptor {
   @override
   String encrypt(String key, String plainText) {
+    if (plainText.trim().isEmpty) return "";
     assert(key.length == 16);
     final cipherKey = Key.fromUtf8(key);
     final encryptService = Encrypter(AES(cipherKey));
@@ -15,6 +16,7 @@ class AESEncryptor extends IEncryptor {
 
   @override
   String decrypt(String key, String encryptedData) {
+    if (encryptedData.trim().isEmpty) return "";
     assert(key.length == 16);
     final cipherKey = Key.fromUtf8(key);
     final encryptService = Encrypter(AES(cipherKey));

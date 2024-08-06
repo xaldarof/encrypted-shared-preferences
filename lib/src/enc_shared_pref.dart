@@ -62,9 +62,9 @@ class EncryptedSharedPreferences {
   }
 
   /// Get the string value associated with the specified key.
-  String? get(String key) {
+  String? get(String key,{String? defaultValue}) {
     assert(_key != null);
-    return _decorator.get(key);
+    return _decorator.get(key,defaultValue: defaultValue);
   }
 
   /// Set the string value for the specified key in SharedPreferences.
@@ -96,27 +96,27 @@ class EncryptedSharedPreferences {
   }
 
   /// Get the string value associated with the specified key.
-  String? getString(String key) {
+  String? getString(String key,{String? defaultValue}) {
     assert(_key != null);
-    return _decorator.getString(key);
+    return _decorator.getString(key,defaultValue: defaultValue);
   }
 
   /// Get the integer value associated with the specified key.
-  int? getInt(String key) {
+  int? getInt(String key,{int? defaultValue}) {
     assert(_key != null);
-    return _decorator.getInt(key);
+    return _decorator.getInt(key,defaultValue: defaultValue);
   }
 
   /// Get the double value associated with the specified key.
-  double? getDouble(String key) {
+  double? getDouble(String key,{double? defaultValue}) {
     assert(_key != null);
-    return _decorator.getDouble(key);
+    return _decorator.getDouble(key,defaultValue: defaultValue);
   }
 
   /// Get the boolean value associated with the specified key.
-  bool? getBoolean(String key) {
+  bool? getBoolean(String key,{bool? defaultValue}) {
     assert(_key != null);
-    return _decorator.getBool(key);
+    return _decorator.getBool(key,defaultValue: defaultValue);
   }
 
   /// Reload SharedPreferences data from disk.
