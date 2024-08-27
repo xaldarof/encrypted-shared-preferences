@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter_test/flutter_test.dart';
