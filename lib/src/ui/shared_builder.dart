@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 class SharedBuilder extends StatelessWidget {
   final Set<String>? listenKeys;
-  final Widget Function(EncryptedSharedPreferences preferences) builder;
+  final Widget Function(
+      EncryptedSharedPreferences preferences, String? updatedKey) builder;
 
   final EncryptedSharedPreferences _preferences =
       EncryptedSharedPreferences.getInstance();
@@ -15,7 +16,7 @@ class SharedBuilder extends StatelessWidget {
           ? _preferences.observeSet(keys: listenKeys!)
           : _preferences.observe(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        return builder(_preferences);
+        return builder(_preferences, snapshot.data);
       },
     );
   }
