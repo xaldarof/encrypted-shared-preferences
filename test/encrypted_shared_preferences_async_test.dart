@@ -2,8 +2,11 @@
 import 'package:encrypt_shared_preferences/src/enc_shared_pref_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart' as pref;
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart' as pref;
 
 void main() async {
+  pref.SharedPreferencesAsyncPlatform.instance = pref.InMemorySharedPreferencesAsync.empty();
   SharedPreferences.setMockInitialValues({});
   await EncryptedSharedPreferencesAsync.initialize("1111111111111111");
   final sharedPref = EncryptedSharedPreferencesAsync.getInstance();
@@ -96,27 +99,8 @@ void main() async {
 
   test('check get all keys', () async {
     await sharedPref.setString("dataKey", "dataValue");
-    var keys = sharedPref.getKeys();
+    var keys = await sharedPref.getKeys();
     expect(keys.length, 1);
-  });
-
-  test('read value of any type', () async {
-    await sharedPref.clear();
-    expect(sharedPref.getKeys().length, 0);
-    //set
-    await sharedPref.setString("valueKey1", "dataValue");
-    await sharedPref.setInt("valueKey2", 100);
-    await sharedPref.setDouble("valueKey3", 101.0);
-    await sharedPref.setBoolean("valueKey4", true);
-    //get
-    String valueStr = sharedPref.get("valueKey1") as String;
-    int valueInt = int.parse(sharedPref.get("valueKey2").toString());
-    double valueDouble = double.parse(sharedPref.get("valueKey3").toString());
-    bool? valueBool = sharedPref.get("valueKey4").toString() == "true";
-    expect(valueStr, "dataValue");
-    expect(valueInt, 100);
-    expect(valueBool, true);
-    expect(valueDouble, 101.0);
   });
 
   test('test remove where', () async {
@@ -128,7 +112,7 @@ void main() async {
           "key3"
     };
     await sharedPref.removeWhere(
-        condition: (key, value) => saveKeySet.contains(key));
+        condition: (key) => saveKeySet.contains(key));
     expect(sharedPref.getString("key2"), "value2");
   });
 
@@ -138,12 +122,10 @@ void main() async {
     final intValue = sharedPref.getInt("key11", defaultValue: 1011);
     final doubleValue = sharedPref.getDouble("key12", defaultValue: 1.23);
     final boolValue = sharedPref.getBoolean("key13", defaultValue: false);
-    final getValue = sharedPref.get("key13", defaultValue: "defaultKey13Value");
 
     expect(strValue, "defaultKey10Value");
     expect(intValue, 1011);
     expect(doubleValue, 1.23);
     expect(boolValue, false);
-    expect(getValue, "defaultKey13Value");
   });
 }

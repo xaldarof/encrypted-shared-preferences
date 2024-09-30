@@ -3,7 +3,6 @@ import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_decorator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptedSharedPreferences {
   EncryptedSharedPreferences._();
@@ -27,9 +26,10 @@ class EncryptedSharedPreferences {
   static Future<void> initialize(String key, {IEncryptor? encryptor}) async {
     _key = key;
     _decorator = SharedPreferencesDecorator(
-        preferences: await SharedPreferences.getInstance(),
-        encryptor: encryptor ?? AESEncryptor(),
-        key: _key!);
+      encryptor: encryptor ?? AESEncryptor(),
+      key: _key!,
+      preferences: _decorator,
+    );
   }
 
   /// Clear all key-valure pairs from SharedPreferences.
