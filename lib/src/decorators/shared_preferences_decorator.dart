@@ -4,7 +4,7 @@ import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'crypto/encryptor.dart';
+import '../crypto/encryptor.dart';
 
 class SharedPreferencesDecorator implements SharedPreferences {
   final SharedPreferences _preferences;

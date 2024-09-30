@@ -5,17 +5,17 @@ import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_decorator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class EncryptedSharedPreferences {
-  EncryptedSharedPreferences._();
+class EncryptedSharedPreferencesAsync {
+  EncryptedSharedPreferencesAsync._();
 
   static String? _key;
 
   static late SharedPreferencesDecorator _decorator;
 
-  static final EncryptedSharedPreferences _instance =
-      EncryptedSharedPreferences._();
+  static final EncryptedSharedPreferencesAsync _instance =
+  EncryptedSharedPreferencesAsync._();
 
-  static EncryptedSharedPreferences getInstance() {
+  static EncryptedSharedPreferencesAsync getInstance() {
     assert(_key != null);
     return _instance;
   }
@@ -41,8 +41,8 @@ class EncryptedSharedPreferences {
   /// Remove by checking condition.
   Future<bool> removeWhere(
       {bool notify = true,
-      bool notifyEach = false,
-      required Function(String key, String value) condition}) async {
+        bool notifyEach = false,
+        required Function(String key, String value) condition}) async {
     assert(_key != null);
     return _decorator.removeWhere(
         condition: condition, notify: notify, notifyEach: notifyEach);
@@ -163,6 +163,6 @@ class EncryptedSharedPreferences {
 
   ///Save with batch
   Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
-          {bool notify = true}) =>
+      {bool notify = true}) =>
       _decorator.batch(invoke, notify: notify);
 }
