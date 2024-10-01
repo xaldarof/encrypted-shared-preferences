@@ -26,8 +26,7 @@ class EncryptedSharedPreferencesAsync {
   static Future<void> initialize(String key, {IEncryptor? encryptor}) async {
     _key = key;
     _decorator = SharedPreferencesDecoratorAsync(
-        encryptor: encryptor ?? AESEncryptor(),
-        key: _key!);
+        encryptor: encryptor ?? AESEncryptor(), key: _key!);
   }
 
   /// Clear all key-valure pairs from SharedPreferences.
