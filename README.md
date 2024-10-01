@@ -157,10 +157,10 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            EncryptedSharedPreferences.getInstance()
+            EncryptedSharedPreferencesAsync.getInstance()
                 .setString('key1', 'dataValue');
             Future.delayed(const Duration(seconds: 3), () {
-              EncryptedSharedPreferences.getInstance()
+              EncryptedSharedPreferencesAsync.getInstance()
                   .setString('key2', 'dataValue');
             });
           },
