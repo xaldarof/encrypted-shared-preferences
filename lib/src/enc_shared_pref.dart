@@ -3,6 +3,7 @@ import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_decorator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptedSharedPreferences {
   EncryptedSharedPreferences._();
@@ -28,7 +29,7 @@ class EncryptedSharedPreferences {
     _decorator = SharedPreferencesDecorator(
       encryptor: encryptor ?? AESEncryptor(),
       key: _key!,
-      preferences: _decorator,
+      preferences: await SharedPreferences.getInstance(),
     );
   }
 
