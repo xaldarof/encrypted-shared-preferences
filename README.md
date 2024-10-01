@@ -141,6 +141,37 @@ class _MyAppState extends State<MyApp> {
 
 ```
 
+[Shared builder async] Here is example of how to use SharedBuilder widget
+
+```dart
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: SharedBuilderAsync(
+          listenKeys: const {"key1", "key2"}, //Optional
+          builder: (EncryptedSharedPreferencesAsync encryptedSharedPreferences,String? updatedKey) {
+            return Text("value : $updatedKey");
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            EncryptedSharedPreferences.getInstance()
+                .setString('key1', 'dataValue');
+            Future.delayed(const Duration(seconds: 3), () {
+              EncryptedSharedPreferences.getInstance()
+                  .setString('key2', 'dataValue');
+            });
+          },
+        ),
+      ),
+    );
+  }
+}
+
+```
+
 Also you can add custom external encryptor
 
 ```dart
