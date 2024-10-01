@@ -6,6 +6,7 @@ class CustomEncryptorAlgorithm implements IEncryptor {
   String decrypt(String key, String encryptedData) {
     const decryptedData = "";
 
+    EncryptedSharedPreferencesAsync.getInstance().getKeys();
     return decryptedData;
   }
 

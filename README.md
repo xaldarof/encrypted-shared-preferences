@@ -8,6 +8,9 @@ dependency.
 
 [Open pub.dev](https://pub.dev/packages/encrypt_shared_preferences)
 
+
+Legacy EncryptedSharedPreferences
+
 ```dart
 void main() async {
   final key = "";
@@ -30,6 +33,57 @@ void main() async {
   await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
 
   sharedPref.getBoolean('isPremium'); //true
+
+  await sharedPref.remove('user_token', notify: true); //notify = true by default
+
+  await sharedPref.clear(notify: true); //notify = true by default
+
+  await sharedPref.reload();
+
+  final badKeys = {
+    "key1"
+        "key2"
+  };
+  await sharedPref.removeWhere((key, value) => badKeys.contains(key),
+      notifyEach: true); //notifyEach:true for notifying for each key update
+
+  sharedPref.observe(key: 'token').listen((event) {
+    // event = key
+    print(event);
+  });
+
+  sharedPref.observeSet(keys: {'key1', 'key2', 'keyN'}).listen((event) {
+    // event = key
+    print(event);
+  });
+}
+```
+
+
+EncryptedSharedPreferencesAsync
+
+```dart
+void main() async {
+  final key = "";
+  await EncryptedSharedPreferencesAsync.initialize(key: key);
+  var sharedPref = EncryptedSharedPreferencesAsync.getInstance();
+
+  await sharedPref.setString(
+      'user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
+
+  await sharedPref.getString('user_token'); //xxxxxxxxxxxx
+
+  await sharedPref.setInt('age', 99, notify: true); //notify = true by default
+
+  await sharedPref.getInt('age', defaultValue: 1001); //99
+
+  await sharedPref.setDouble('pi', 3.14, notify: true); //notify = true by default
+
+  await sharedPref.getDouble('pi'); //3.14
+
+  await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
+
+  await sharedPref.getBoolean('isPremium'); //true
 
   await sharedPref.remove('user_token', notify: true); //notify = true by default
 

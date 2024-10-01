@@ -53,9 +53,9 @@ class EncryptedSharedPreferencesAsync {
   }
 
   /// Get the set of all keys stored in SharedPreferences.
-  Future<Set<String>> getKeys() {
+  Future<Set<String>> getKeys({Set<String>? allowList}) async {
     assert(_key != null);
-    return _decorator.getKeys();
+    return _decorator.getKeys(allowList: allowList);
   }
 
   /// Set the string value for the specified key in SharedPreferences.
@@ -145,9 +145,4 @@ class EncryptedSharedPreferencesAsync {
   ///Save map
   Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) =>
       _decorator.setMap(map);
-
-  ///Save with batch
-  Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
-          {bool notify = true}) =>
-      _decorator.batch(invoke, notify: notify);
 }
