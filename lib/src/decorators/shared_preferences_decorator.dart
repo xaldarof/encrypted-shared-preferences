@@ -104,9 +104,14 @@ class SharedPreferencesDecorator implements SharedPreferences {
   }
 
   @override
-  List<String>? getStringList(String key) {
+  List<String>? getStringList(String key, {List<String>? defaultValue}) {
     final set = _preferences.getStringList(_encryptor.encrypt(_key, key));
-    return set?.map((e) => _encryptor.decrypt(_key, e)).toList();
+    if (set != null) {
+      return set.map((e) {
+        return _encryptor.decrypt(_key, e);
+      }).toList();
+    }
+    return defaultValue;
   }
 
   @override
@@ -173,12 +178,17 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Future<bool> save(String key, dynamic value, {required bool notify}) {
     _notify(key, notify);
     if (value != null) {
-      var enKey = _encryptor.encrypt(_key, key);
-      if (value == "") {
-        return _preferences.setString(enKey, value);
+      var encryptedKey = _encryptor.encrypt(_key, key);
+      if (value is List<String>) {
+        return _preferences.setStringList(
+            encryptedKey, value.map((e) => _encryptor.encrypt(_key, e)).toList());
+      } else {
+        if (value == "") {
+          return _preferences.setString(encryptedKey, value);
+        }
+        return _preferences.setString(
+            encryptedKey, _encryptor.encrypt(_key, value.toString()));
       }
-      return _preferences.setString(
-          enKey, _encryptor.encrypt(_key, value.toString()));
     } else {
       return remove(key);
     }

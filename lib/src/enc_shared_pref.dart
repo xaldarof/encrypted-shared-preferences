@@ -96,6 +96,19 @@ class EncryptedSharedPreferences {
     return _decorator.setBool(dataKey, dataValue, notify: notify);
   }
 
+  /// Set the List<String> value for the specified key in SharedPreferences.
+  Future<bool> setStringList(String dataKey, List<String>? dataValue,
+      {bool notify = true}) async {
+    assert(_key != null);
+    return _decorator.setStringList(dataKey, dataValue, notify: notify);
+  }
+
+  /// Get the List<String> value for the specified key in SharedPreferences.
+  List<String>? getStringList(String key, {String? defaultValue}) {
+    assert(_key != null);
+    return _decorator.getStringList(key);
+  }
+
   /// Get the string value associated with the specified key.
   String? getString(String key, {String? defaultValue}) {
     assert(_key != null);
