@@ -1,13 +1,13 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
-class SharedBuilder extends StatelessWidget {
+class SharedBuilderAsync extends StatelessWidget {
   final Set<String>? listenKeys;
   final Widget Function(
-      EncryptedSharedPreferences preferences, String? updatedKey) builder;
+      EncryptedSharedPreferencesAsync preferences, String? updatedKey) builder;
 
-  final EncryptedSharedPreferences _preferences =
-      EncryptedSharedPreferences.getInstance();
+  final EncryptedSharedPreferencesAsync _preferences =
+  EncryptedSharedPreferencesAsync.getInstance();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class SharedBuilder extends StatelessWidget {
     );
   }
 
-  SharedBuilder({
+  SharedBuilderAsync({
     super.key,
     this.listenKeys,
     required this.builder,

@@ -2,11 +2,8 @@
 import 'package:encrypt_shared_preferences/src/enc_shared_pref_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart' as pref;
-import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart' as pref;
 
 void main() async {
-  pref.SharedPreferencesAsyncPlatform.instance = pref.InMemorySharedPreferencesAsync.empty();
   SharedPreferences.setMockInitialValues({});
   await EncryptedSharedPreferencesAsync.initialize("1111111111111111");
   final sharedPref = EncryptedSharedPreferencesAsync.getInstance();

@@ -1,6 +1,6 @@
 name: encrypt_shared_preferences
 description: This package adds extra layer of protection to sensitive information like user credentials, API keys, or other confidential data stored in your app.
-version: 0.7.6
+version: 0.8.0
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.3.2
-  encrypt: ^5.0.1
+  encrypt: ^5.0.3
 
 dev_dependencies:
   flutter_test:
