@@ -3,6 +3,7 @@ import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_decorator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptedSharedPreferences {
   EncryptedSharedPreferences._();
@@ -28,7 +29,7 @@ class EncryptedSharedPreferences {
     _decorator = SharedPreferencesDecorator(
       encryptor: encryptor ?? AESEncryptor(),
       key: _key!,
-      preferences: _decorator,
+      preferences: await SharedPreferences.getInstance(),
     );
   }
 
@@ -93,6 +94,19 @@ class EncryptedSharedPreferences {
       {bool notify = true}) async {
     assert(_key != null);
     return _decorator.setBool(dataKey, dataValue, notify: notify);
+  }
+
+  /// Set the List<String> value for the specified key in SharedPreferences.
+  Future<bool> setStringList(String dataKey, List<String>? dataValue,
+      {bool notify = true}) async {
+    assert(_key != null);
+    return _decorator.setStringList(dataKey, dataValue, notify: notify);
+  }
+
+  /// Get the List<String> value for the specified key in SharedPreferences.
+  List<String>? getStringList(String key, {String? defaultValue}) {
+    assert(_key != null);
+    return _decorator.getStringList(key);
   }
 
   /// Get the string value associated with the specified key.

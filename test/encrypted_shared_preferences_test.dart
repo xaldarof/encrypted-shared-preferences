@@ -1,4 +1,3 @@
-
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,5 +144,12 @@ void main() async {
     expect(doubleValue, 1.23);
     expect(boolValue, false);
     expect(getValue, "defaultKey13Value");
+  });
+
+  test('test saving string list value', () async {
+    final strValue = await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+    expect(strValue, true);
+    final actual = sharedPref.getStringList('stringList');
+    expect(actual, ["apple", "orange", "boom"]);
   });
 }

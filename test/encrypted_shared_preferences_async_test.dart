@@ -128,4 +128,11 @@ void main() async {
     expect(doubleValue, 1.23);
     expect(boolValue, false);
   });
+
+  test('test saving string list value', () async {
+    final strValue = await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+    expect(strValue, true);
+    final actual = await sharedPref.getStringList('stringList');
+    expect(actual, ["apple", "orange", "boom"]);
+  });
 }

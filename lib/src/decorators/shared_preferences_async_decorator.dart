@@ -156,22 +156,24 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   }
 
   Future<bool> save(String key, dynamic value, {required bool notify}) async {
-    try {
-      if (value != null) {
-        var enKey = _encryptor.encrypt(_key, key);
-        if (value == "") {
-          await super.setString(enKey, value);
-          return true;
-        }
-        await super
-            .setString(enKey, _encryptor.encrypt(_key, value.toString()));
-        _notify(key, notify);
+    _notify(key, notify);
+    if (value != null) {
+      var encryptedKey = _encryptor.encrypt(_key, key);
+      if (value is List<String>) {
+        await super.setStringList(encryptedKey,
+            value.map((e) => _encryptor.encrypt(_key, e)).toList());
         return true;
       } else {
-        return remove(key);
+        if (value == "") {
+          super.setString(encryptedKey, value);
+          return true;
+        }
+        super.setString(
+            encryptedKey, _encryptor.encrypt(_key, value.toString()));
+        return true;
       }
-    } catch (e) {
-      return false;
+    } else {
+      return remove(key);
     }
   }
 
