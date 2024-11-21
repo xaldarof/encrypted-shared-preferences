@@ -34,6 +34,10 @@ void main() async {
 
   sharedPref.getBoolean('isPremium'); //true
 
+  await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+
+  sharedPref.getStringList("stringList");
+
   await sharedPref.remove('user_token', notify: true); //notify = true by default
 
   await sharedPref.clear(notify: true); //notify = true by default
@@ -84,6 +88,10 @@ void main() async {
   await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
 
   await sharedPref.getBoolean('isPremium'); //true
+
+  await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+  
+  await sharedPref.getStringList("stringList");
 
   await sharedPref.remove('user_token', notify: true); //notify = true by default
 

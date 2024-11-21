@@ -1,4 +1,3 @@
-
 import 'package:encrypt_shared_preferences/src/enc_shared_pref_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +11,7 @@ void main() async {
   test('test listen key', () async {
     sharedPref.listen(key: 'singleKey').listen(
       expectAsync1(
-            (event) {
+        (event) {
           expect(event, 'singleKey');
         },
       ),
@@ -24,7 +23,7 @@ void main() async {
   test('test listen key with observe method', () async {
     sharedPref.observe(key: 'singleKeyObserve').listen(
       expectAsync1(
-            (event) {
+        (event) {
           expect(event, 'singleKeyObserve');
         },
       ),
@@ -36,7 +35,7 @@ void main() async {
   test('test listen set of keys', () async {
     sharedPref.observeSet(keys: {"keySet1", 'keySet2'}).listen(
       expectAsync1(
-            (event) {
+        (event) {
           expect(event, 'keySet1');
         },
       ),
@@ -47,7 +46,7 @@ void main() async {
   test('test listen set of keys with observeSet method', () async {
     sharedPref.observeSet(keys: {"keySet1Observe", 'keySet2Observe'}).listen(
       expectAsync1(
-            (event) {
+        (event) {
           expect(event, 'keySet1Observe');
         },
       ),
@@ -108,14 +107,13 @@ void main() async {
       "key1"
           "key3"
     };
-    await sharedPref.removeWhere(
-        condition: (key) => saveKeySet.contains(key));
+    await sharedPref.removeWhere(condition: (key) => saveKeySet.contains(key));
     expect(sharedPref.getString("key2"), "value2");
   });
 
   test('test defaultValue', () {
     final strValue =
-    sharedPref.getString("key10", defaultValue: "defaultKey10Value");
+        sharedPref.getString("key10", defaultValue: "defaultKey10Value");
     final intValue = sharedPref.getInt("key11", defaultValue: 1011);
     final doubleValue = sharedPref.getDouble("key12", defaultValue: 1.23);
     final boolValue = sharedPref.getBoolean("key13", defaultValue: false);
@@ -127,7 +125,8 @@ void main() async {
   });
 
   test('test saving string list value', () async {
-    final strValue = await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+    final strValue = await sharedPref
+        .setStringList("stringList", ["apple", "orange", "boom"]);
     expect(strValue, true);
     final actual = await sharedPref.getStringList('stringList');
     expect(actual, ["apple", "orange", "boom"]);

@@ -15,3 +15,4 @@
 * 0.7.3: Add removeWhere method
 * 0.7.4: Add removeWhere method param notifyEach
 * 0.7.5: Add defaultValue param
+* 0.8.1: Add missing method setStringList()

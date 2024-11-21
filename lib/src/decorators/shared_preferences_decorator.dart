@@ -180,8 +180,8 @@ class SharedPreferencesDecorator implements SharedPreferences {
     if (value != null) {
       var encryptedKey = _encryptor.encrypt(_key, key);
       if (value is List<String>) {
-        return _preferences.setStringList(
-            encryptedKey, value.map((e) => _encryptor.encrypt(_key, e)).toList());
+        return _preferences.setStringList(encryptedKey,
+            value.map((e) => _encryptor.encrypt(_key, e)).toList());
       } else {
         if (value == "") {
           return _preferences.setString(encryptedKey, value);

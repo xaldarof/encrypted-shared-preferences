@@ -147,7 +147,8 @@ void main() async {
   });
 
   test('test saving string list value', () async {
-    final strValue = await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
+    final strValue = await sharedPref
+        .setStringList("stringList", ["apple", "orange", "boom"]);
     expect(strValue, true);
     final actual = sharedPref.getStringList('stringList');
     expect(actual, ["apple", "orange", "boom"]);

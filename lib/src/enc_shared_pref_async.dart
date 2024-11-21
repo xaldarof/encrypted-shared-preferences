@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:encrypt_shared_preferences/src/batch.dart';
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_async_decorator.dart';
@@ -118,7 +117,8 @@ class EncryptedSharedPreferencesAsync {
   }
 
   /// Get the List<String> value for the specified key in SharedPreferences.
-  Future<List<String>?> getStringList(String key, {String? defaultValue}) async {
+  Future<List<String>?> getStringList(String key,
+      {String? defaultValue}) async {
     assert(_key != null);
     return _decorator.getStringList(key);
   }
