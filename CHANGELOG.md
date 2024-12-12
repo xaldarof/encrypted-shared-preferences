@@ -16,3 +16,4 @@
 * 0.7.4: Add removeWhere method param notifyEach
 * 0.7.5: Add defaultValue param
 * 0.8.1: Add missing method setStringList()
+* 0.8.2: Fix recursion error on SharedPreferencesAsync clear

@@ -36,7 +36,7 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   @override
   Future<bool> clear({bool notify = true, Set<String>? allowList}) async {
     try {
-      await clear(notify: notify, allowList: allowList);
+      await super.clear(allowList: allowList);
       _notify('', notify);
       return true;
     } catch (e) {
