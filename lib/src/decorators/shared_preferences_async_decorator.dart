@@ -165,10 +165,10 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
         return true;
       } else {
         if (value == "") {
-          super.setString(encryptedKey, value);
+          await super.setString(encryptedKey, value);
           return true;
         }
-        super.setString(
+        await super.setString(
             encryptedKey, _encryptor.encrypt(_key, value.toString()));
         return true;
       }
