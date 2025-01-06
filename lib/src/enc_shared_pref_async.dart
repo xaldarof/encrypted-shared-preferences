@@ -85,6 +85,14 @@ class EncryptedSharedPreferencesAsync {
     return _decorator.setBool(dataKey, dataValue, notify: notify);
   }
 
+  /// Set the boolean value for the specified key in SharedPreferences.
+  /// Added for better integration with SharedPreferences
+  Future<bool> setBool(String dataKey, bool? dataValue,
+      {bool notify = true}) async {
+    assert(_key != null);
+    return _decorator.setBool(dataKey, dataValue, notify: notify);
+  }
+
   /// Get the string value associated with the specified key.
   Future<String?> getString(String key, {String? defaultValue}) {
     assert(_key != null);
@@ -105,6 +113,13 @@ class EncryptedSharedPreferencesAsync {
 
   /// Get the boolean value associated with the specified key.
   Future<bool?> getBoolean(String key, {bool? defaultValue}) {
+    assert(_key != null);
+    return _decorator.getBool(key, defaultValue: defaultValue);
+  }
+
+  /// Get the boolean value associated with the specified key.
+  /// Added for better integration with SharedPreferences
+  Future<bool?> getBool(String key, {bool? defaultValue}) async {
     assert(_key != null);
     return _decorator.getBool(key, defaultValue: defaultValue);
   }

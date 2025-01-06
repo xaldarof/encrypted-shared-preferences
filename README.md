@@ -30,9 +30,9 @@ void main() async {
 
   sharedPref.getDouble('pi'); //3.14
 
-  await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
+  await sharedPref.setBool('isPremium', true, notify: true); //notify = true by default
 
-  sharedPref.getBoolean('isPremium'); //true
+  sharedPref.getBool('isPremium'); //true
 
   await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
 
@@ -85,9 +85,9 @@ void main() async {
 
   await sharedPref.getDouble('pi'); //3.14
 
-  await sharedPref.setBoolean('isPremium', true, notify: true); //notify = true by default
+  await sharedPref.setBool('isPremium', true, notify: true); //notify = true by default
 
-  await sharedPref.getBoolean('isPremium'); //true
+  await sharedPref.getBool('isPremium'); //true
 
   await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
   
