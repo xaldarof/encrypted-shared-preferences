@@ -17,3 +17,5 @@
 * 0.7.5: Add defaultValue param
 * 0.8.1: Add missing method setStringList()
 * 0.8.2: Fix recursion error on SharedPreferencesAsync clear
+* 0.8.3: Fixed #15
+* 0.8.4: Added new methods getBool,setBool for better integration with SharedPreferences
