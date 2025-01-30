@@ -15,7 +15,7 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   Stream<String> listen({String? key}) async* {
     await for (final event in listenable.stream) {
       if (key != null) {
-        if (event == key) {
+        if (event == key || key == '') {
           yield event;
         }
       } else {
@@ -27,7 +27,7 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   Stream<String> listenSet({required Set<String> keys}) async* {
     assert(keys.isNotEmpty);
     await for (final event in listenable.stream) {
-      if (keys.contains(event)) {
+      if (keys.contains(event) || event == '') {
         yield event;
       }
     }
