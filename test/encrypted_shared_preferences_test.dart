@@ -81,7 +81,7 @@ void main() async {
   });
 
   test('check data clear', () async {
-    var res = await sharedPref.clear();
+    var res = await sharedPref.clear(notify: false);
     expect(res, true);
     expect(sharedPref.getString('dataKey'), null);
   });
@@ -100,7 +100,7 @@ void main() async {
   });
 
   test('read value of any type', () async {
-    await sharedPref.clear();
+    await sharedPref.clear(notify: false);
     expect(sharedPref.getKeys().length, 0);
     //set
     await sharedPref.setString("valueKey1", "dataValue");

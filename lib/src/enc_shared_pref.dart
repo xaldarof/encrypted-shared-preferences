@@ -42,11 +42,9 @@ class EncryptedSharedPreferences {
   /// Remove by checking condition.
   Future<bool> removeWhere(
       {bool notify = true,
-      bool notifyEach = false,
       required Function(String key, String value) condition}) async {
     assert(_key != null);
-    return _decorator.removeWhere(
-        condition: condition, notify: notify, notifyEach: notifyEach);
+    return _decorator.removeWhere(condition: condition, notify: notify);
   }
 
   /// Remove the value associated with the specified key from SharedPreferences.
@@ -178,12 +176,6 @@ class EncryptedSharedPreferences {
   Stream<String> listenSet({required Set<String> keys}) {
     assert(_key != null);
     return _decorator.listenSet(keys: keys);
-  }
-
-  /// Notify listeners
-  Stream<String> notifyObservers() {
-    assert(_key != null);
-    return _decorator.notifyObservers();
   }
 
   ///Save map

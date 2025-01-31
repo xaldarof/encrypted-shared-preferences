@@ -16,7 +16,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Stream<String> listen({String? key}) async* {
     await for (final event in listenable.stream) {
       if (key != null) {
-        if (event == key || event == '') {
+        if (event == key) {
           yield event;
         }
       } else {
@@ -28,7 +28,7 @@ class SharedPreferencesDecorator implements SharedPreferences {
   Stream<String> listenSet({required Set<String> keys}) async* {
     assert(keys.isNotEmpty);
     await for (final event in listenable.stream) {
-      if (keys.contains(event) || event == '') {
+      if (keys.contains(event)) {
         yield event;
       }
     }
@@ -36,8 +36,11 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   @override
   Future<bool> clear({bool notify = true}) {
+    final Set<String> keys = getKeys();
     final cleared = _preferences.clear();
-    _notify('', notify);
+    for (var k in keys) {
+      _notify(k, notify);
+    }
     return cleared;
   }
 
@@ -137,18 +140,14 @@ class SharedPreferencesDecorator implements SharedPreferences {
 
   Future<bool> removeWhere(
       {bool notify = true,
-      bool notifyEach = false,
       required Function(String key, String value) condition}) async {
     try {
       await Future.forEach(getKeys(), (key) async {
         if (condition(key, get(key)!)) {
           await _preferences.remove(_encryptor.encrypt(_key, key));
-          if (notifyEach) {
-            _notify(key, true);
-          }
+          _notify(key, notify);
         }
       });
-      _notify('', notify);
       return true;
     } catch (e) {
       return false;
@@ -175,22 +174,25 @@ class SharedPreferencesDecorator implements SharedPreferences {
     return save(key, value, notify: notify);
   }
 
-  Future<bool> save(String key, dynamic value, {required bool notify}) {
-    _notify(key, notify);
+  Future<bool> save(String key, dynamic value, {required bool notify}) async {
     if (value != null) {
+      bool isSuccess = false;
       var encryptedKey = _encryptor.encrypt(_key, key);
       if (value is List<String>) {
-        return _preferences.setStringList(encryptedKey,
+        isSuccess = await _preferences.setStringList(encryptedKey,
             value.map((e) => _encryptor.encrypt(_key, e)).toList());
+      } else if (value is String && value.isEmpty) {
+        isSuccess = await _preferences.setString(encryptedKey, value);
       } else {
-        if (value == "") {
-          return _preferences.setString(encryptedKey, value);
-        }
-        return _preferences.setString(
+        isSuccess = await _preferences.setString(
             encryptedKey, _encryptor.encrypt(_key, value.toString()));
       }
+      _notify(key, notify);
+      return isSuccess;
     } else {
-      return remove(key);
+      final isSuccess = await remove(key);
+      _notify(key, notify);
+      return isSuccess;
     }
   }
 
@@ -208,17 +210,15 @@ class SharedPreferencesDecorator implements SharedPreferences {
         _encryptor = encryptor,
         _key = key;
 
-  notifyObservers() {
-    _notify('', true);
-  }
-
   Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) async {
     await Future.forEach(map.keys.toList(), (element) async {
       final key = _encryptor.encrypt(_key, element);
       final value = _encryptor.encrypt(_key, map[element]);
       await _preferences.setString(key, value);
     });
-    _notify('', notify);
+    for (var k in map.keys) {
+      _notify(k, notify);
+    }
   }
 
   Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,

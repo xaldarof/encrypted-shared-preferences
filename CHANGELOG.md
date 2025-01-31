@@ -19,4 +19,5 @@
 * 0.8.2: Fix recursion error on SharedPreferencesAsync clear
 * 0.8.3: Fixed #15
 * 0.8.4: Added new methods getBool,setBool for better integration with SharedPreferences
-* 0.8.5: Fix notify on clear, removeWhere
+* 0.8.6: Fix notify on clear, removeWhere
+* 0.8.7: Update key value change notify logic(notify will be invoked only after key change), Fix tests

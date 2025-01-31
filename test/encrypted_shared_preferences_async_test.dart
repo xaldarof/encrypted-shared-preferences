@@ -1,9 +1,12 @@
 import 'package:encrypt_shared_preferences/src/enc_shared_pref_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 
 void main() async {
-  SharedPreferences.setMockInitialValues({});
+  SharedPreferencesAsyncPlatform.instance =
+      InMemorySharedPreferencesAsync.empty();
   await EncryptedSharedPreferencesAsync.initialize("1111111111111111");
   final sharedPref = EncryptedSharedPreferencesAsync.getInstance();
   await sharedPref.clear();
@@ -57,40 +60,40 @@ void main() async {
 
   test('check data string saved', () async {
     await sharedPref.setString("dataKey", "dataValue");
-    expect(sharedPref.getString('dataKey'), "dataValue");
+    expect(await sharedPref.getString('dataKey'), "dataValue");
   });
 
   test('check empty string saved', () async {
     await sharedPref.setString("keyDataEmpty", "");
-    expect(sharedPref.getString("keyDataEmpty"), "");
+    expect(await sharedPref.getString("keyDataEmpty"), "");
   });
 
   test('check data int saved', () async {
     await sharedPref.setInt("age", 99);
-    expect(sharedPref.getInt('age'), 99);
+    expect(await sharedPref.getInt('age'), 99);
   });
 
   test('check data double saved', () async {
     await sharedPref.setDouble("pi", 3.14);
-    expect(sharedPref.getDouble('pi'), 3.14);
+    expect(await sharedPref.getDouble('pi'), 3.14);
   });
 
   test('check data boolean saved', () async {
     sharedPref.setBoolean("isPremium", true);
-    expect(sharedPref.getBoolean('isPremium'), true);
+    expect(await sharedPref.getBoolean('isPremium'), true);
   });
 
   test('check data clear', () async {
-    var res = await sharedPref.clear();
+    var res = await sharedPref.clear(notify: false);
     expect(res, true);
-    expect(sharedPref.getString('dataKey'), null);
+    expect(await sharedPref.getString('dataKey'), null);
   });
 
   test('check data removed', () async {
     await sharedPref.setString("dataKey", "dataValue");
-    expect(sharedPref.getString('dataKey'), "dataValue");
+    expect(await sharedPref.getString('dataKey'), "dataValue");
     await sharedPref.remove('dataKey');
-    expect(sharedPref.getString('dataKey'), null);
+    expect(await sharedPref.getString('dataKey'), null);
   });
 
   test('check get all keys', () async {
@@ -108,15 +111,15 @@ void main() async {
           "key3"
     };
     await sharedPref.removeWhere(condition: (key) => saveKeySet.contains(key));
-    expect(sharedPref.getString("key2"), "value2");
+    expect(await sharedPref.getString("key2"), "value2");
   });
 
-  test('test defaultValue', () {
+  test('test defaultValue', () async {
     final strValue =
-        sharedPref.getString("key10", defaultValue: "defaultKey10Value");
-    final intValue = sharedPref.getInt("key11", defaultValue: 1011);
-    final doubleValue = sharedPref.getDouble("key12", defaultValue: 1.23);
-    final boolValue = sharedPref.getBoolean("key13", defaultValue: false);
+        await sharedPref.getString("key10", defaultValue: "defaultKey10Value");
+    final intValue = await sharedPref.getInt("key11", defaultValue: 1011);
+    final doubleValue = await sharedPref.getDouble("key12", defaultValue: 1.23);
+    final boolValue = await sharedPref.getBoolean("key13", defaultValue: false);
 
     expect(strValue, "defaultKey10Value");
     expect(intValue, 1011);

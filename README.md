@@ -48,8 +48,7 @@ void main() async {
     "key1"
         "key2"
   };
-  await sharedPref.removeWhere((key, value) => badKeys.contains(key),
-      notifyEach: true); //notifyEach:true for notifying for each key update
+  await sharedPref.removeWhere((key, value) => badKeys.contains(key));
 
   sharedPref.observe(key: 'token').listen((event) {
     // event = key
@@ -90,7 +89,7 @@ void main() async {
   await sharedPref.getBool('isPremium'); //true
 
   await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
-  
+
   await sharedPref.getStringList("stringList");
 
   await sharedPref.remove('user_token', notify: true); //notify = true by default
@@ -103,8 +102,8 @@ void main() async {
     "key1"
         "key2"
   };
-  await sharedPref.removeWhere((key, value) => badKeys.contains(key),
-      notifyEach: true); //notifyEach:true for notifying for each key update
+  await sharedPref.removeWhere((key, value) =>
+      badKeys.contains(key));
 
   sharedPref.observe(key: 'token').listen((event) {
     // event = key

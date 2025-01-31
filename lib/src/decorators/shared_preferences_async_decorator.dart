@@ -15,7 +15,7 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   Stream<String> listen({String? key}) async* {
     await for (final event in listenable.stream) {
       if (key != null) {
-        if (event == key || key == '') {
+        if (event == key) {
           yield event;
         }
       } else {
@@ -27,7 +27,7 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   Stream<String> listenSet({required Set<String> keys}) async* {
     assert(keys.isNotEmpty);
     await for (final event in listenable.stream) {
-      if (keys.contains(event) || event == '') {
+      if (keys.contains(event)) {
         yield event;
       }
     }
@@ -36,8 +36,11 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   @override
   Future<bool> clear({bool notify = true, Set<String>? allowList}) async {
     try {
+      final keys = await getKeys();
       await super.clear(allowList: allowList);
-      _notify('', notify);
+      for (var k in keys) {
+        _notify(k, notify);
+      }
       return true;
     } catch (e) {
       return false;
@@ -107,8 +110,11 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   @override
   Future<bool> remove(String key, {bool notify = true}) async {
     try {
+      final keys = await getKeys();
       await super.remove(_encryptor.encrypt(_key, key));
-      _notify(key, notify);
+      for (var k in keys) {
+        _notify(k, notify);
+      }
       return true;
     } catch (e) {
       return false;
@@ -116,19 +122,16 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   }
 
   Future<bool> removeWhere(
-      {bool notify = true,
-      bool notifyEach = false,
-      required Function(String key) condition}) async {
+      {bool notify = true, required Function(String key) condition}) async {
     try {
       await Future.forEach(await getKeys(), (key) async {
         if (condition(key)) {
           await super.remove(_encryptor.encrypt(_key, key));
-          if (notifyEach) {
-            _notify(key, true);
+          if (notify) {
+            _notify(key, notify);
           }
         }
       });
-      _notify('', notify);
       return true;
     } catch (e) {
       return false;
@@ -156,24 +159,27 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   }
 
   Future<bool> save(String key, dynamic value, {required bool notify}) async {
-    _notify(key, notify);
     if (value != null) {
       var encryptedKey = _encryptor.encrypt(_key, key);
+      bool isSuccess = false;
       if (value is List<String>) {
         await super.setStringList(encryptedKey,
             value.map((e) => _encryptor.encrypt(_key, e)).toList());
-        return true;
+        isSuccess = true;
+      } else if (value is String && value.isEmpty) {
+        await super.setString(encryptedKey, value);
+        isSuccess = true;
       } else {
-        if (value == "") {
-          await super.setString(encryptedKey, value);
-          return true;
-        }
         await super.setString(
             encryptedKey, _encryptor.encrypt(_key, value.toString()));
-        return true;
+        isSuccess = true;
       }
+      _notify(key, notify);
+      return isSuccess;
     } else {
-      return remove(key);
+      final isSuccess = await remove(key);
+      _notify(key, notify);
+      return isSuccess;
     }
   }
 
@@ -189,17 +195,15 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   })  : _encryptor = encryptor,
         _key = key;
 
-  notifyObservers() {
-    _notify('', true);
-  }
-
   Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) async {
     await Future.forEach(map.keys.toList(), (element) async {
       final key = _encryptor.encrypt(_key, element);
       final value = _encryptor.encrypt(_key, map[element]);
       await super.setString(key, value);
     });
-    _notify('', notify);
+    for (var k in map.keys) {
+      _notify(k, notify);
+    }
   }
 
   Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
