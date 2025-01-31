@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:encrypt_shared_preferences/src/batch.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../crypto/encryptor.dart';
@@ -203,24 +201,6 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
     });
     for (var k in map.keys) {
       _notify(k, notify);
-    }
-  }
-
-  Future<void> batch(Future<bool> Function(BatchSharedPreferences batch) invoke,
-      {bool notify = true}) async {
-    final Map<String, dynamic> map = {};
-    final keys = await super.getKeys();
-    for (var element in keys) {
-      final value = _encryptor.decrypt(_key, (await super.getString(element))!);
-      map[_encryptor.decrypt(_key, element)] = value;
-    }
-
-    BatchSharedPreferences batchSharedPreferences =
-        BatchSharedPreferences(batch: map);
-    if (await invoke(batchSharedPreferences) == true) {
-      await setMap(batchSharedPreferences.batch, notify: notify);
-    } else {
-      if (kDebugMode) print('Batch return false');
     }
   }
 }

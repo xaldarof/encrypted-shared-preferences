@@ -8,7 +8,6 @@ dependency.
 
 [Open pub.dev](https://pub.dev/packages/encrypt_shared_preferences)
 
-
 Legacy EncryptedSharedPreferences
 
 ```dart
@@ -61,7 +60,6 @@ void main() async {
   });
 }
 ```
-
 
 EncryptedSharedPreferencesAsync
 
@@ -127,7 +125,7 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: SharedBuilder(
           listenKeys: const {"key1", "key2"}, //Optional
-          builder: (EncryptedSharedPreferences encryptedSharedPreferences,String? updatedKey) {
+          builder: (EncryptedSharedPreferences encryptedSharedPreferences, String? updatedKey) {
             return Text("value : ${encryptedSharedPreferences.getString("key1")}");
           },
         ),
@@ -158,7 +156,8 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: SharedBuilderAsync(
           listenKeys: const {"key1", "key2"}, //Optional
-          builder: (EncryptedSharedPreferencesAsync encryptedSharedPreferences,String? updatedKey) {
+          builder: (EncryptedSharedPreferencesAsync encryptedSharedPreferences,
+              String? updatedKey) {
             return Text("value : $updatedKey");
           },
         ),
@@ -199,19 +198,4 @@ void main() {
   await EncryptedSharedPreferences.initialize(key: key, encryptor: CustomEncryptor());
   var sharedPref = EncryptedSharedPreferences.getInstance();
 }
-```
-
-
-Save using batch(Experimental)
-
-
-```dart
-    await EncryptedSharedPreferences.getInstance().batch((batch) async {
-      //await all async preference operations
-      await batch.setString('dataKey1', 'dataValue1');
-      await batch.setString('dataKey2', 'dataValue2');
-      await batch.setString('dataKey3', 'dataValue3');
-
-      return Future(() => true);
-    });
 ```
