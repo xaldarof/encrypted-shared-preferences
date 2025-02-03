@@ -18,9 +18,10 @@ class CustomEncryptorAlgorithm implements IEncryptor {
 }
 
 void main() async {
-  await EncryptedSharedPreferences.initialize('1111111111111111',
-      encryptor: CustomEncryptorAlgorithm());
-
+  await EncryptedSharedPreferences.initialize('1111111111111111');
+  EncryptedSharedPreferences.getInstance().setString('dataKey1', 'dataValue');
+  EncryptedSharedPreferences.getInstance().setString('dataKey2', 'dataValue');
+  EncryptedSharedPreferences.getInstance().setString('dataKey3', 'dataValue');
   runApp(const MyApp());
 }
 
