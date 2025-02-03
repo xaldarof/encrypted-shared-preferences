@@ -1,0 +1,5 @@
+name: encrypted_shared_preferences_inspector
+version: 0.0.1
+issueTracker: https://github.com/xaldarof/encrypted-shared-preferences/issues
+materialIconCodePoint: '0xe0b1'
+requiresConnection: true
