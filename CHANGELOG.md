@@ -23,3 +23,4 @@
 * 0.8.7: Update key value change notify logic(notify will be invoked only after key change), Fix tests
 * 0.8.8: Add simple devtools
 * 0.8.9: Add devtools
+* 0.9.2: Dev tools fix async api
