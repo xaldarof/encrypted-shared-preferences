@@ -24,3 +24,4 @@
 * 0.8.8: Add simple devtools
 * 0.8.9: Add devtools
 * 0.9.2: Dev tools fix async api
+* 0.9.3: Update Readme
