@@ -111,7 +111,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.8.8"
+    version: "0.9.1"
   extension_discovery:
     dependency: transitive
     description:
