@@ -203,4 +203,12 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
       _notify(k, notify);
     }
   }
+
+  Future<Map<String, dynamic>> getAsMap() async {
+    Map<String, dynamic> map = {};
+    for (var element in (await super.getKeys())) {
+      map[element] = super.getString(element);
+    }
+    return map;
+  }
 }
