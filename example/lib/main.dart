@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -48,16 +50,24 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Shared Builder Demo'),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            EncryptedSharedPreferences.getInstance()
-                .setString('key1', 'dataValue');
-            Future.delayed(const Duration(seconds: 3), () {
+        floatingActionButton: Column(children: [
+          FloatingActionButton(
+            onPressed: () async {
               EncryptedSharedPreferences.getInstance()
-                  .setString('key2', 'dataValue');
-            });
-          },
-        ),
+                  .setString('key1', Random().nextInt(100).toString());
+              Future.delayed(const Duration(seconds: 3), () {
+                EncryptedSharedPreferences.getInstance()
+                    .setString('key2', 'dataValue');
+              });
+            },
+          ),
+          FloatingActionButton(
+            onPressed: () async {
+              EncryptedSharedPreferences.getInstance()
+                  .setString('Random key ${Random().nextInt(100)}', Random().nextInt(100).toString());
+            }
+          ),
+        ],)
       ),
     );
   }

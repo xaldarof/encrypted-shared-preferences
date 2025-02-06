@@ -37,6 +37,7 @@ class SharedPreferencesToolEval {
   Disposable? _valueDisposable;
   Disposable? _changeValueDisposable;
   Disposable? _removeValueDisposable;
+  Disposable? _listenChangesDisposable;
 
   /// Fetches all keys in the shared preferences of the target debug session.
   /// Returns a string list of all keys.
@@ -56,6 +57,14 @@ class SharedPreferencesToolEval {
     return (
       asyncKeys: castList('asyncKeys'),
       legacyKeys: castList('legacyKeys'),
+    );
+  }
+
+  Future<void> listenChanges() async {
+    _evalMethod(
+      method: 'listenChanges()',
+      eventKind: 'listenChanges',
+      isAlive: _listenChangesDisposable,
     );
   }
 

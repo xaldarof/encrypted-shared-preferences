@@ -20,6 +20,7 @@ class SharedPreferencesState {
     this.selectedKey,
     this.editing = false,
     this.legacyApi = false,
+    this.lastUpdatedKey = const AsyncState.data(null),
   });
 
   /// A list of all keys in the shared preferences of the target debug session using the selected API.
@@ -35,6 +36,8 @@ class SharedPreferencesState {
   /// Whether the user has selected the legacy api or not.
   final bool legacyApi;
 
+  final AsyncState<String?> lastUpdatedKey;
+
   /// Creates a copy of this [SharedPreferencesState] but replacing the given
   /// fields with the new values.
   SharedPreferencesState Function({
@@ -42,11 +45,13 @@ class SharedPreferencesState {
     SelectedSharedPreferencesKey? selectedKey,
     bool editing,
     bool legacyApi,
+    AsyncState<String?> lastUpdatedKey,
   }) get copyWith => ({
         Object allKeys = _undefined,
         Object? selectedKey = _undefined,
         Object editing = _undefined,
         Object legacyApi = _undefined,
+        Object lastUpdatedKey = _undefined,
       }) {
         return SharedPreferencesState(
           allKeys: allKeys == _undefined
@@ -58,6 +63,9 @@ class SharedPreferencesState {
           editing: editing == _undefined ? this.editing : editing as bool,
           legacyApi:
               legacyApi == _undefined ? this.legacyApi : legacyApi as bool,
+          lastUpdatedKey: lastUpdatedKey == _undefined ? this.lastUpdatedKey
+              : lastUpdatedKey as AsyncState<String?>,
+
         );
       };
 
@@ -68,7 +76,9 @@ class SharedPreferencesState {
             other.allKeys == allKeys &&
             other.selectedKey == selectedKey &&
             other.editing == editing &&
-            other.legacyApi == legacyApi);
+            other.legacyApi == legacyApi &&
+            other.lastUpdatedKey == lastUpdatedKey
+        );
   }
 
   @override
@@ -77,11 +87,12 @@ class SharedPreferencesState {
         selectedKey,
         editing,
         legacyApi,
+        lastUpdatedKey,
       );
 
   @override
   String toString() {
-    return 'SharedPreferencesState(allKeys: $allKeys, selectedKey: $selectedKey, editing: $editing)';
+    return 'SharedPreferencesState{allKeys: $allKeys, selectedKey: $selectedKey, editing: $editing, legacyApi: $legacyApi, lastUpdatedKey: $lastUpdatedKey}';
   }
 }
 

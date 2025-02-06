@@ -31,6 +31,17 @@ class SharedPreferencesDevToolsExtensionData {
 
   final PostEvent _postEvent;
 
+  Future<void> listenChanges() async {
+    print('listen changes invoking');
+    EncryptedSharedPreferences.getInstance().observe().listen((key) {
+      print('post event : ${key}');
+      _postEvent(
+        '${_eventPrefix}listenChanges',
+        {'key': key},
+      );
+    });
+  }
+
   /// Requests all legacy and async keys and post an event with the result.
   Future<void> requestAllKeys() async {
     final EncryptedSharedPreferences legacyPrefs =

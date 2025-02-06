@@ -37,6 +37,7 @@ enum _StateInheritedModelAspect {
   selectedKeyData,
   editing,
   legacyApi,
+  lastUpdatedKey,
 }
 
 /// An inherited model that provides a [SharedPreferencesState] to its descendants.
@@ -77,6 +78,8 @@ class _SharedPreferencesStateInheritedModel
           state.editing != oldWidget.state.editing,
         _StateInheritedModelAspect.legacyApi =>
           state.legacyApi != oldWidget.state.legacyApi,
+        _StateInheritedModelAspect.lastUpdatedKey =>
+          state.lastUpdatedKey != oldWidget.state.lastUpdatedKey,
       },
     );
   }
@@ -144,6 +147,22 @@ class SharedPreferencesStateProvider extends StatefulWidget {
         )!
         .state
         .allKeys;
+  }
+
+  /// Returns the async state of the lastUpdatedKey.
+  static AsyncState<String?> lastUpdatedKeyStateOf(BuildContext context) {
+    final inheritedModel = context.dependOnInheritedWidgetOfExactType<
+        _SharedPreferencesStateInheritedModel>(
+      aspect: _StateInheritedModelAspect.lastUpdatedKey,
+    );
+
+    // Ensure the state is being observed
+    if (inheritedModel != null) {
+      return inheritedModel.state.lastUpdatedKey;
+    }
+
+    // Handle error or fallback case if no inherited model is found.
+    return AsyncState<String?>.error('Failed to find lastUpdatedKey.',StackTrace.empty);
   }
 
   /// Returns the selected key from the closest
@@ -247,6 +266,14 @@ class _SharedPreferencesStateProviderState
     );
     _notifier = SharedPreferencesStateNotifier(toolEval);
     _notifier.fetchAllKeys();
+    service.onExtensionEvent.listen((data) {
+      print(data);
+      if(data.extensionKind == 'shared_preferences.listenChanges') {
+        final key = data.extensionData!.data['key'];
+        _notifier.notifyLastUpdatedKey(key);
+      }
+    });
+    _notifier.listenChanges();
   }
 
   @override
