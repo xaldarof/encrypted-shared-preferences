@@ -173,6 +173,7 @@ class SharedPreferencesToolEval {
     _valueDisposable?.dispose();
     _changeValueDisposable?.dispose();
     _removeValueDisposable?.dispose();
+    _listenChangesDisposable?.dispose();
     _eval.dispose();
   }
 }
