@@ -267,7 +267,6 @@ class _SharedPreferencesStateProviderState
     _notifier = SharedPreferencesStateNotifier(toolEval);
     _notifier.fetchAllKeys();
     service.onExtensionEvent.listen((data) {
-      print(data);
       if(data.extensionKind == 'shared_preferences.listenChanges') {
         final key = data.extensionData!.data['key'];
         _notifier.notifyLastUpdatedKey(key);
