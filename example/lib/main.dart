@@ -8,7 +8,6 @@ class CustomEncryptorAlgorithm implements IEncryptor {
   String decrypt(String key, String encryptedData) {
     const decryptedData = "";
 
-    EncryptedSharedPreferencesAsync.getInstance().getKeys();
     return decryptedData;
   }
 
@@ -20,6 +19,7 @@ class CustomEncryptorAlgorithm implements IEncryptor {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await EncryptedSharedPreferences.initialize('1111111111111111');
   EncryptedSharedPreferences.getInstance().setString('dataKey1', 'dataValue');
   EncryptedSharedPreferences.getInstance().setString('dataKey2', 'dataValue');

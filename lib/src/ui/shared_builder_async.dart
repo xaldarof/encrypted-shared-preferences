@@ -6,8 +6,7 @@ class SharedBuilderAsync extends StatelessWidget {
   final Widget Function(
       EncryptedSharedPreferencesAsync preferences, String? updatedKey) builder;
 
-  final EncryptedSharedPreferencesAsync _preferences =
-      EncryptedSharedPreferencesAsync.getInstance();
+  final EncryptedSharedPreferencesAsync _preferences = EncryptedSharedPreferencesAsync('1111111111111111');
 
   @override
   Widget build(BuildContext context) {

@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 
 const String _eventPrefix = 'shared_preferences.';
 
+const encryptionKey ='1111111111111111';
+
 /// A typedef for the post event function.
 @visibleForTesting
 typedef PostEvent = void Function(
@@ -28,6 +30,7 @@ class SharedPreferencesDevToolsExtensionData {
   const SharedPreferencesDevToolsExtensionData([
     this._postEvent = developer.postEvent,
   ]);
+
 
   final PostEvent _postEvent;
 
@@ -62,7 +65,7 @@ class SharedPreferencesDevToolsExtensionData {
     Set<String> legacyKeys = {};
     Set<String> asyncKeys = {};
     try {
-      asyncKeys = await EncryptedSharedPreferencesAsync.getInstance().getKeys();
+      asyncKeys = await EncryptedSharedPreferencesAsync(encryptionKey).getKeys();
     } catch (e) {
       print('Async api not initialized');
     }
@@ -88,8 +91,8 @@ class SharedPreferencesDevToolsExtensionData {
       value = legacyPrefs.get(key);
     } else {
       final EncryptedSharedPreferencesAsync preferences =
-          EncryptedSharedPreferencesAsync.getInstance();
-      value = await EncryptedSharedPreferencesAsync.getInstance()
+          EncryptedSharedPreferencesAsync(encryptionKey);
+      value = await EncryptedSharedPreferencesAsync(encryptionKey)
           .getAsMap(allowList: <String>{key}).then(
               (Map<String, Object?> map) => map.values.firstOrNull);
     }
@@ -137,7 +140,7 @@ class SharedPreferencesDevToolsExtensionData {
       }
     } else {
       final EncryptedSharedPreferencesAsync prefs =
-          EncryptedSharedPreferencesAsync.getInstance();
+          EncryptedSharedPreferencesAsync(encryptionKey);
       // we need to check the kind because sometimes a double
       // gets interpreted as an int. If this was not an issue
       // we'd only need to do a simple pattern matching on value.
@@ -171,7 +174,7 @@ class SharedPreferencesDevToolsExtensionData {
           EncryptedSharedPreferences.getInstance();
       await legacyPrefs.remove(key);
     } else {
-      await EncryptedSharedPreferencesAsync.getInstance().remove(key);
+      await EncryptedSharedPreferencesAsync(encryptionKey).remove(key);
     }
     _postEvent('${_eventPrefix}remove', <String, Object?>{});
   }

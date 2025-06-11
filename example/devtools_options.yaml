@@ -3,3 +3,4 @@ documentation: https://docs.flutter.dev/tools/devtools/extensions#configure-exte
 extensions:
   - encrypted_shared_preferences_inspector: true
   - encrypt_shared_preferences: true
+  - shared_preferences: true
