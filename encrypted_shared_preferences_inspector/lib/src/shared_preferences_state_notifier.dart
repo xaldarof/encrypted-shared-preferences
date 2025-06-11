@@ -28,15 +28,24 @@ class SharedPreferencesStateNotifier
 
   List<String> get _keysForSelectedApi => _legacyApi ? _legacyKeys : _asyncKeys;
 
+
+
+  Future<void> notifyLastUpdatedKey(String key) async {
+    value = value.copyWith(
+      lastUpdatedKey: AsyncState.data(key)
+    );
+    fetchAllKeys(skipRefresh: true);
+  }
   /// Retrieves all keys from the shared preferences of the target debug session.
   ///
   /// If this is called when data already exists, it will update the list of keys.
-  Future<void> fetchAllKeys() async {
-    value = value.copyWith(
-      selectedKey: null,
-      allKeys: const AsyncState<List<String>>.loading(),
-    );
-
+  Future<void> fetchAllKeys({bool skipRefresh = false}) async {
+    if(!skipRefresh) {
+      value = value.copyWith(
+        selectedKey: null,
+        allKeys:  AsyncState<List<String>>.loading(),
+      );
+    }
     try {
       final KeysResult allKeys = await _eval.fetchAllKeys();
       _legacyKeys = allKeys.legacyKeys;
@@ -58,6 +67,9 @@ class SharedPreferencesStateNotifier
         allKeys: AsyncState<List<String>>.error(error, stackTrace),
       );
     }
+  }
+  Future<void> listenChanges() async {
+    _eval.listenChanges();
   }
 
   /// Set the key as selected and retrieve the value from the shared preferences of the target debug session.
@@ -158,4 +170,5 @@ class SharedPreferencesStateNotifier
       ),
     );
   }
+
 }

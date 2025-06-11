@@ -179,27 +179,44 @@ class _StateMapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (SharedPreferencesStateProvider.keysListStateOf(context)) {
-      final AsyncStateData<List<String>> value => _KeysList(
-          keys: value.data,
+    final keysState = SharedPreferencesStateProvider.keysListStateOf(context);
+    final lastUpdatedKeyState = SharedPreferencesStateProvider.lastUpdatedKeyStateOf(context);
+
+    return switch (keysState) {
+    // When the keys list is loaded successfully
+      final AsyncStateData<List<String>> keysValue => switch (lastUpdatedKeyState) {
+      // When the lastUpdatedKey is loaded successfully
+        final AsyncStateData<String?> lastUpdatedKeyValue => _KeysList(
+          keys: keysValue.data,
+          latestUpdatedKey: lastUpdatedKeyValue.data,
         ),
-      final AsyncStateError<List<String>> value => ErrorPanel(
-          error: value.error,
-          stackTrace: value.stackTrace,
+      // When there's an error loading lastUpdatedKey
+        final AsyncStateError<String?> lastUpdatedKeyError => ErrorPanel(
+          error: lastUpdatedKeyError.error,
+          stackTrace: lastUpdatedKeyError.stackTrace,
         ),
-      AsyncStateLoading<List<String>>() => const Center(
-          child: CircularProgressIndicator(),
-        ),
+      // When the lastUpdatedKey is still loading
+        AsyncStateLoading<String?>() => const Center(child: CircularProgressIndicator()),
+      },
+    // When there's an error loading the keys list
+      final AsyncStateError<List<String>> keysError => ErrorPanel(
+        error: keysError.error,
+        stackTrace: keysError.stackTrace,
+      ),
+    // When the keys list is still loading
+      AsyncStateLoading<List<String>>() => const Center(child: CircularProgressIndicator()),
     };
   }
+
 }
 
 class _KeysList extends StatefulWidget {
   const _KeysList({
-    required this.keys,
+    required this.keys, required this.latestUpdatedKey,
   });
 
   final List<String> keys;
+  final String? latestUpdatedKey;
 
   @override
   State<_KeysList> createState() => _KeysListState();
@@ -223,7 +240,7 @@ class _KeysListState extends State<_KeysList> {
         children: <Widget>[
           for (final String keyName in widget.keys)
             _KeyItem(
-              keyName: keyName,
+              keyName: keyName, isLatestUpdatedKey: widget.latestUpdatedKey == keyName,
             ),
         ],
       ),
@@ -233,10 +250,11 @@ class _KeysListState extends State<_KeysList> {
 
 class _KeyItem extends StatelessWidget {
   const _KeyItem({
-    required this.keyName,
+    required this.keyName, required this.isLatestUpdatedKey,
   });
 
   final String keyName;
+  final bool isLatestUpdatedKey;
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +279,9 @@ class _KeyItem extends StatelessWidget {
         ),
         child: Text(
           keyName,
-          style: Theme.of(context).textTheme.titleSmall,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: isLatestUpdatedKey ? Colors.amber : null
+          ),
         ),
       ),
     );

@@ -25,3 +25,4 @@
 * 0.8.9: Add devtools
 * 0.9.2: Dev tools fix async api
 * 0.9.3: Update Readme
+* 0.9.5: Indicate on DevToolExtension added or updated key

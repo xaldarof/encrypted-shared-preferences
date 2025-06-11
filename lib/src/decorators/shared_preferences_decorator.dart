@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../crypto/encryptor.dart';
@@ -141,9 +142,13 @@ class SharedPreferencesDecorator implements SharedPreferences {
       required Function(String key, String value) condition}) async {
     try {
       await Future.forEach(getKeys(), (key) async {
-        if (condition(key, get(key)!)) {
-          await _preferences.remove(_encryptor.encrypt(_key, key));
-          _notify(key, notify);
+        try {
+          if (condition(key, get(key)!)) {
+            await _preferences.remove(_encryptor.encrypt(_key, key));
+            _notify(key, notify);
+          }
+        } catch (e) {
+          debugPrint(e.toString());
         }
       });
       return true;

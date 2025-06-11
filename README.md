@@ -201,5 +201,4 @@ void main() {
 
 DevTools extension for inspecting values
 
-![screenshot](screenshots/devtools.png)
-
+![alt text](https://github.com/xaldarof/encrypted-shared-preferences/blob/main/screenshots/devtools.png?raw=true)

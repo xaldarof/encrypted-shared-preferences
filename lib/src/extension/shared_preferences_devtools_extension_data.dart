@@ -34,6 +34,30 @@ class SharedPreferencesDevToolsExtensionData {
 
   final PostEvent _postEvent;
 
+  Future<void> listenChanges() async {
+    try {
+      EncryptedSharedPreferences.getInstance().observe().listen((key) {
+        _postEvent(
+          '${_eventPrefix}listenChanges',
+          {'key': key},
+        );
+      });
+    }catch(e) {
+      print('Legacy api not initialized');
+    }
+    try {
+      EncryptedSharedPreferencesAsync.getInstance().observe().listen((key) {
+        _postEvent(
+          '${_eventPrefix}listenChanges',
+          {'key': key},
+        );
+      });
+    }catch(e) {
+      print('Async api not initialized');
+    }
+
+  }
+
   /// Requests all legacy and async keys and post an event with the result.
   Future<void> requestAllKeys() async {
     final EncryptedSharedPreferences legacyPrefs =
