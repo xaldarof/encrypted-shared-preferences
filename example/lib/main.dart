@@ -18,6 +18,7 @@ class CustomEncryptorAlgorithm implements IEncryptor {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await EncryptedSharedPreferences.initialize('1111111111111111');
   EncryptedSharedPreferences.getInstance().setString('dataKey1', 'dataValue');
   EncryptedSharedPreferences.getInstance().setString('dataKey2', 'dataValue');
