@@ -66,8 +66,7 @@ EncryptedSharedPreferencesAsync
 ```dart
 void main() async {
   final key = "";
-  await EncryptedSharedPreferencesAsync.initialize(key: key);
-  var sharedPref = EncryptedSharedPreferencesAsync.getInstance();
+  var sharedPref = EncryptedSharedPreferencesAsync(key);
 
   await sharedPref.setString(
       'user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
