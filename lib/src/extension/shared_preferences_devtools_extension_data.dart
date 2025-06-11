@@ -35,13 +35,23 @@ class SharedPreferencesDevToolsExtensionData {
   Future<void> requestAllKeys() async {
     final EncryptedSharedPreferences legacyPrefs =
         EncryptedSharedPreferences.getInstance();
-    final Set<String> legacyKeys = legacyPrefs.getKeys();
-    final Set<String> asyncKeys =
-        EncryptedSharedPreferences.getInstance().getKeys();
+    Set<String> legacyKeys = {};
+    Set<String> asyncKeys = {};
+    try {
+      asyncKeys = await EncryptedSharedPreferencesAsync.getInstance().getKeys();
+    } catch (e) {
+      print('Async api not initialized');
+    }
+
+    try {
+      legacyKeys = legacyPrefs.getKeys();
+    } catch (e) {
+      print('Legacy api not initialized');
+    }
 
     _postEvent('${_eventPrefix}all_keys', <String, List<String>>{
-      'asyncKeys': legacyKeys.toList(),
-      'legacyKeys': asyncKeys.toList(),
+      'asyncKeys': asyncKeys.toList(),
+      'legacyKeys': legacyKeys.toList(),
     });
   }
 
@@ -53,7 +63,11 @@ class SharedPreferencesDevToolsExtensionData {
           EncryptedSharedPreferences.getInstance();
       value = legacyPrefs.get(key);
     } else {
-      value = 'dsadasd';
+      final EncryptedSharedPreferencesAsync preferences =
+          EncryptedSharedPreferencesAsync.getInstance();
+      value = await EncryptedSharedPreferencesAsync.getInstance()
+          .getAsMap(allowList: <String>{key}).then(
+              (Map<String, Object?> map) => map.values.firstOrNull);
     }
 
     _postEvent('${_eventPrefix}value', <String, Object?>{
@@ -98,8 +112,8 @@ class SharedPreferencesDevToolsExtensionData {
           );
       }
     } else {
-      final EncryptedSharedPreferences prefs =
-          EncryptedSharedPreferences.getInstance();
+      final EncryptedSharedPreferencesAsync prefs =
+          EncryptedSharedPreferencesAsync.getInstance();
       // we need to check the kind because sometimes a double
       // gets interpreted as an int. If this was not an issue
       // we'd only need to do a simple pattern matching on value.
@@ -133,7 +147,7 @@ class SharedPreferencesDevToolsExtensionData {
           EncryptedSharedPreferences.getInstance();
       await legacyPrefs.remove(key);
     } else {
-      EncryptedSharedPreferencesAsync.getInstance().remove(key);
+      await EncryptedSharedPreferencesAsync.getInstance().remove(key);
     }
     _postEvent('${_eventPrefix}remove', <String, Object?>{});
   }

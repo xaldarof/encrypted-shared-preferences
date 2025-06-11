@@ -199,3 +199,8 @@ void main() {
   var sharedPref = EncryptedSharedPreferences.getInstance();
 }
 ```
+
+DevTools extension for inspecting values
+
+![screenshot](screenshots/devtools.png)
+

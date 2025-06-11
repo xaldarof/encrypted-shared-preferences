@@ -164,4 +164,7 @@ class EncryptedSharedPreferencesAsync {
   ///Save map
   Future<void> setMap(Map<String, dynamic> map, {bool notify = true}) =>
       _decorator.setMap(map);
+
+  ///Get all values as map
+  Future<Map<String,dynamic>> getAsMap({required Set<String> allowList}) => _decorator.getAsMap();
 }
