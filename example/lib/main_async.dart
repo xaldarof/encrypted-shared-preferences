@@ -1,12 +1,11 @@
-
 import 'dart:math';
 
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
-  await EncryptedSharedPreferencesAsync.initialize('1111111111111111');
+const key = '1111111111111111';
 
+void main() async {
   runApp(const MyApp());
 }
 
@@ -29,8 +28,7 @@ class _MyAppState extends State<MyApp> {
             return FutureBuilder(
               future: encryptedSharedPreferences.getString("key1"),
               builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                return Text(
-                    "value : ${snapshot.data}");
+                return Text("value : ${snapshot.data}");
               },
             );
           },
@@ -40,10 +38,9 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            EncryptedSharedPreferencesAsync.getInstance()
-                .setString('key1', 'dataValue');
+            EncryptedSharedPreferencesAsync(key).setString('key1', 'dataValue');
             Future.delayed(const Duration(seconds: 3), () {
-              EncryptedSharedPreferencesAsync.getInstance()
+              EncryptedSharedPreferencesAsync(key)
                   .setString('key1', 'dataValue:${Random().nextInt(100)}');
             });
           },

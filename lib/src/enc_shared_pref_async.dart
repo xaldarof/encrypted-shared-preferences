@@ -4,29 +4,17 @@ import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_async_decorator.dart';
 
 class EncryptedSharedPreferencesAsync {
-  EncryptedSharedPreferencesAsync._();
-
-  static String? _key;
+  static final String? _key;
 
   static late SharedPreferencesDecoratorAsync _decorator;
 
-  static final EncryptedSharedPreferencesAsync _instance =
-      EncryptedSharedPreferencesAsync._();
-
-  static EncryptedSharedPreferencesAsync getInstance() {
-    assert(_key != null);
-    return _instance;
+  EncryptedSharedPreferencesAsync(String key, {IEncryptor? encryptor}) {
+    _decorator = SharedPreferencesDecoratorAsync(
+        encryptor: encryptor ?? AESEncryptor(), key: _key!);
   }
 
   /// Stream that emits a new value whenever the SharedPreferences data changes.
   Stream<String> get stream => _decorator.listenable.stream;
-
-  /// Initialize the EncryptedSharedPreferences with the provided encryption key.
-  static Future<void> initialize(String key, {IEncryptor? encryptor}) async {
-    _key = key;
-    _decorator = SharedPreferencesDecoratorAsync(
-        encryptor: encryptor ?? AESEncryptor(), key: _key!);
-  }
 
   /// Clear all key-valure pairs from SharedPreferences.
   Future<bool> clear({bool notify = true, Set<String>? allowList}) async {
@@ -166,5 +154,6 @@ class EncryptedSharedPreferencesAsync {
       _decorator.setMap(map);
 
   ///Get all values as map
-  Future<Map<String,dynamic>> getAsMap({required Set<String> allowList}) => _decorator.getAsMap();
+  Future<Map<String, dynamic>> getAsMap({required Set<String> allowList}) =>
+      _decorator.getAsMap();
 }

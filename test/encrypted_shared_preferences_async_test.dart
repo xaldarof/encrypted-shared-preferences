@@ -7,8 +7,7 @@ import 'package:shared_preferences_platform_interface/in_memory_shared_preferenc
 void main() async {
   SharedPreferencesAsyncPlatform.instance =
       InMemorySharedPreferencesAsync.empty();
-  await EncryptedSharedPreferencesAsync.initialize("1111111111111111");
-  final sharedPref = EncryptedSharedPreferencesAsync.getInstance();
+  final sharedPref = EncryptedSharedPreferencesAsync('1111111111111111');
   await sharedPref.clear();
 
   test('test listen key', () async {
