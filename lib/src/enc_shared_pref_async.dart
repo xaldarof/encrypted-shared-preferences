@@ -4,11 +4,11 @@ import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_async_decorator.dart';
 
 class EncryptedSharedPreferencesAsync {
-  static final String? _key;
+  final String? _key;
 
-  static late SharedPreferencesDecoratorAsync _decorator;
+  late final SharedPreferencesDecoratorAsync _decorator;
 
-  EncryptedSharedPreferencesAsync(String key, {IEncryptor? encryptor}) {
+  EncryptedSharedPreferencesAsync(this._key, {IEncryptor? encryptor}) {
     _decorator = SharedPreferencesDecoratorAsync(
         encryptor: encryptor ?? AESEncryptor(), key: _key!);
   }
