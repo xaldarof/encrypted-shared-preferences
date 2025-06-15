@@ -46,7 +46,7 @@ class SharedPreferencesDevToolsExtensionData {
       print('Legacy api not initialized');
     }
     try {
-      EncryptedSharedPreferencesAsync.getInstance().observe().listen((key) {
+      EncryptedSharedPreferencesAsync(encryptionKey).observe().listen((key) {
         _postEvent(
           '${_eventPrefix}listenChanges',
           {'key': key},
