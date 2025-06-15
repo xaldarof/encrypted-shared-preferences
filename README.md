@@ -13,8 +13,8 @@ Legacy EncryptedSharedPreferences
 ```dart
 void main() async {
   final key = "";
-  await EncryptedSharedPreferences.initialize(key: key);
-  var sharedPref = EncryptedSharedPreferences.getInstance();
+  var sharedPref = await EncryptedSharedPreferences.create(key: key);
+  
 
   await sharedPref.setString(
       'user_token', 'xxxxxxxxxxxx', notify: true); ////notify = true by default
