@@ -36,7 +36,8 @@ class SharedPreferencesDevToolsExtensionData {
 
   Future<void> listenChanges() async {
     try {
-      EncryptedSharedPreferences.getInstance().observe().listen((key) {
+      final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create(encryptionKey);
+      legacyPrefs.observe().listen((key) {
         _postEvent(
           '${_eventPrefix}listenChanges',
           {'key': key},
@@ -60,8 +61,7 @@ class SharedPreferencesDevToolsExtensionData {
 
   /// Requests all legacy and async keys and post an event with the result.
   Future<void> requestAllKeys() async {
-    final EncryptedSharedPreferences legacyPrefs =
-        EncryptedSharedPreferences.getInstance();
+    final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create(encryptionKey);
     Set<String> legacyKeys = {};
     Set<String> asyncKeys = {};
     try {
@@ -86,8 +86,7 @@ class SharedPreferencesDevToolsExtensionData {
   Future<void> requestValue(String key, bool legacy) async {
     final Object? value;
     if (legacy) {
-      final EncryptedSharedPreferences legacyPrefs =
-          EncryptedSharedPreferences.getInstance();
+      final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create(key);
       value = legacyPrefs.get(key);
     } else {
       final EncryptedSharedPreferencesAsync preferences =
@@ -114,8 +113,7 @@ class SharedPreferencesDevToolsExtensionData {
   ) async {
     final Object? value = jsonDecode(serializedValue);
     if (legacy) {
-      final EncryptedSharedPreferences legacyPrefs =
-          EncryptedSharedPreferences.getInstance();
+      final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create(key);
       // we need to check the kind because sometimes a double
       // gets interpreted as an int. If this was not an issue
       // we'd only need to do a simple pattern matching on value.
@@ -139,8 +137,7 @@ class SharedPreferencesDevToolsExtensionData {
           );
       }
     } else {
-      final EncryptedSharedPreferencesAsync prefs =
-          EncryptedSharedPreferencesAsync(encryptionKey);
+      final EncryptedSharedPreferencesAsync prefs = EncryptedSharedPreferencesAsync(encryptionKey);
       // we need to check the kind because sometimes a double
       // gets interpreted as an int. If this was not an issue
       // we'd only need to do a simple pattern matching on value.
@@ -170,8 +167,7 @@ class SharedPreferencesDevToolsExtensionData {
   /// Requests a key removal and posts an empty event when removed.
   Future<void> requestRemoveKey(String key, bool legacy) async {
     if (legacy) {
-      final EncryptedSharedPreferences legacyPrefs =
-          EncryptedSharedPreferences.getInstance();
+      final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create(key);
       await legacyPrefs.remove(key);
     } else {
       await EncryptedSharedPreferencesAsync(encryptionKey).remove(key);
