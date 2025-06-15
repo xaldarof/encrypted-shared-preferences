@@ -20,10 +20,10 @@ class CustomEncryptorAlgorithm implements IEncryptor {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EncryptedSharedPreferences.initialize('1111111111111111');
-  EncryptedSharedPreferences.getInstance().setString('dataKey1', 'dataValue');
-  EncryptedSharedPreferences.getInstance().setString('dataKey2', 'dataValue');
-  EncryptedSharedPreferences.getInstance().setString('dataKey3', 'dataValue');
+  final EncryptedSharedPreferences legacyPrefs = await EncryptedSharedPreferences.create('1111111111111111');
+  legacyPrefs.setString('dataKey1', 'dataValue');
+  legacyPrefs.setString('dataKey2', 'dataValue');
+  legacyPrefs.setString('dataKey3', 'dataValue');
   runApp(const MyApp());
 }
 
@@ -35,40 +35,46 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late EncryptedSharedPreferences legacyPrefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  Future setInstance() async {
+    legacyPrefs = await EncryptedSharedPreferences.create('1111111111111111');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SharedBuilder(
-          listenKeys: const {"key1", "key2"}, //Optional
-          builder: (EncryptedSharedPreferences encryptedSharedPreferences,
-              String? updatedKey) {
-            return Text(
-                "value : ${encryptedSharedPreferences.getString("key1")}");
-          },
-        ),
-        appBar: AppBar(
-          title: const Text('Shared Builder Demo'),
-        ),
-        floatingActionButton: Column(children: [
-          FloatingActionButton(
-            onPressed: () async {
-              EncryptedSharedPreferences.getInstance()
-                  .setString('key1', Random().nextInt(100).toString());
-              Future.delayed(const Duration(seconds: 3), () {
-                EncryptedSharedPreferences.getInstance()
-                    .setString('key2', 'dataValue');
-              });
+          body: SharedBuilder(
+            listenKeys: const {"key1", "key2"}, //Optional
+            builder: (EncryptedSharedPreferences encryptedSharedPreferences, String? updatedKey) {
+              return Text("value : ${encryptedSharedPreferences.getString("key1")}");
             },
           ),
-          FloatingActionButton(
-            onPressed: () async {
-              EncryptedSharedPreferences.getInstance()
-                  .setString('Random key ${Random().nextInt(100)}', Random().nextInt(100).toString());
-            }
+          appBar: AppBar(
+            title: const Text('Shared Builder Demo'),
           ),
-        ],)
-      ),
+          floatingActionButton: Column(
+            children: [
+              FloatingActionButton(
+                onPressed: () async {
+                  legacyPrefs.setString('key1', Random().nextInt(100).toString());
+                  Future.delayed(const Duration(seconds: 3), () {
+                    legacyPrefs.setString('key2', 'dataValue');
+                  });
+                },
+              ),
+              FloatingActionButton(onPressed: () async {
+                legacyPrefs.setString('Random key ${Random().nextInt(100)}', Random().nextInt(100).toString());
+              }),
+            ],
+          )),
     );
   }
 }

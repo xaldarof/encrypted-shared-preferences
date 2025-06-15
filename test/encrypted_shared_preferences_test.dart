@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   SharedPreferences.setMockInitialValues({});
-  await EncryptedSharedPreferences.initialize("1111111111111111");
-  final sharedPref = EncryptedSharedPreferences.getInstance();
+  final sharedPref = await EncryptedSharedPreferences.create("1111111111111111");
+
   await sharedPref.clear();
 
   test('test listen key', () async {
@@ -126,14 +126,12 @@ void main() async {
       "key1"
           "key3"
     };
-    await sharedPref.removeWhere(
-        condition: (key, value) => saveKeySet.contains(key));
+    await sharedPref.removeWhere(condition: (key, value) => saveKeySet.contains(key));
     expect(sharedPref.getString("key2"), "value2");
   });
 
   test('test defaultValue', () {
-    final strValue =
-        sharedPref.getString("key10", defaultValue: "defaultKey10Value");
+    final strValue = sharedPref.getString("key10", defaultValue: "defaultKey10Value");
     final intValue = sharedPref.getInt("key11", defaultValue: 1011);
     final doubleValue = sharedPref.getDouble("key12", defaultValue: 1.23);
     final boolValue = sharedPref.getBoolean("key13", defaultValue: false);
@@ -147,8 +145,7 @@ void main() async {
   });
 
   test('test saving string list value', () async {
-    final strValue = await sharedPref
-        .setStringList("stringList", ["apple", "orange", "boom"]);
+    final strValue = await sharedPref.setStringList("stringList", ["apple", "orange", "boom"]);
     expect(strValue, true);
     final actual = sharedPref.getStringList('stringList');
     expect(actual, ["apple", "orange", "boom"]);
