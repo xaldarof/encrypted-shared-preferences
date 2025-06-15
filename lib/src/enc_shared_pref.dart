@@ -1,35 +1,30 @@
 import 'dart:async';
+
 import 'package:encrypt_shared_preferences/src/crypto/aes.dart';
 import 'package:encrypt_shared_preferences/src/crypto/encryptor.dart';
 import 'package:encrypt_shared_preferences/src/decorators/shared_preferences_decorator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptedSharedPreferences {
-  EncryptedSharedPreferences._();
+  final String? _key;
+  final SharedPreferencesDecorator _decorator;
 
-  static String? _key;
+  EncryptedSharedPreferences._(this._key, this._decorator);
 
-  static late SharedPreferencesDecorator _decorator;
-
-  static final EncryptedSharedPreferences _instance =
-      EncryptedSharedPreferences._();
-
-  static EncryptedSharedPreferences getInstance() {
-    assert(_key != null);
-    return _instance;
-  }
-
-  /// Stream that emits a new value whenever the SharedPreferences data changes.
-  Stream<String> get stream => _decorator.listenable.stream;
-
-  /// Initialize the EncryptedSharedPreferences with the provided encryption key.
-  static Future<void> initialize(String key, {IEncryptor? encryptor}) async {
-    _key = key;
-    _decorator = SharedPreferencesDecorator(
+  /// Creates a new instance of [EncryptedSharedPreferences] with the provided encryption [key].
+  ///
+  /// This method allows for multiple independent encrypted preference instances,
+  /// avoiding conflicts caused by shared static state.
+  ///
+  /// Returns a fully initialized [EncryptedSharedPreferences] instance.
+  static Future<EncryptedSharedPreferences> create(String key, {IEncryptor? encryptor}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final decorator = SharedPreferencesDecorator(
       encryptor: encryptor ?? AESEncryptor(),
-      key: _key!,
-      preferences: await SharedPreferences.getInstance(),
+      key: key,
+      preferences: prefs,
     );
+    return EncryptedSharedPreferences._(key, decorator);
   }
 
   /// Clear all key-valure pairs from SharedPreferences.
