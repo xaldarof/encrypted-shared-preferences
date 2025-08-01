@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../crypto/encryptor.dart';
@@ -82,7 +83,21 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   @override
   Future<Set<String>> getKeys({Set<String>? allowList}) async {
     final set = await super.getKeys();
-    return set.map((e) => _encryptor.decrypt(_key, e)).toSet();
+    final filtered = <String>{};
+
+    for (final key in set) {
+      if (allowList != null && !allowList.contains(key)) continue;
+      try {
+        final decrypted = _encryptor.decrypt(_key, key);
+        filtered.add(decrypted);
+      } catch (e) {
+        if (kDebugMode) {
+          print('Skipping non-encrypted or corrupt key: $key');
+        }
+      }
+    }
+
+    return filtered;
   }
 
   @override
