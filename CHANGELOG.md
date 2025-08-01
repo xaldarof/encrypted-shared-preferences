@@ -26,4 +26,4 @@
 * 0.9.2: Dev tools fix async api
 * 0.9.3: Update Readme
 * 0.9.5: Indicate on DevToolExtension added or updated key
-* 0.1.0: Fix https://github.com/xaldarof/encrypted-shared-preferences/issues/19
+* 0.9.10: Fix https://github.com/xaldarof/encrypted-shared-preferences/issues/19
