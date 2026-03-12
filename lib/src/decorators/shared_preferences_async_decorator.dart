@@ -11,25 +11,16 @@ class SharedPreferencesDecoratorAsync extends SharedPreferencesAsync {
   final StreamController<String> listenable =
       StreamController<String>.broadcast();
 
-  Stream<String> listen({String? key}) async* {
-    await for (final event in listenable.stream) {
-      if (key != null) {
-        if (event == key) {
-          yield event;
-        }
-      } else {
-        yield event;
-      }
+  Stream<String> listen({String? key}) {
+    if (key != null) {
+      return listenable.stream.where((event) => event == key);
     }
+    return listenable.stream;
   }
 
-  Stream<String> listenSet({required Set<String> keys}) async* {
+  Stream<String> listenSet({required Set<String> keys}) {
     assert(keys.isNotEmpty);
-    await for (final event in listenable.stream) {
-      if (keys.contains(event)) {
-        yield event;
-      }
-    }
+    return listenable.stream.where((event) => keys.contains(event));
   }
 
   @override
