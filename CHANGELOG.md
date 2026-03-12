@@ -28,3 +28,4 @@
 * 0.9.5: Indicate on DevToolExtension added or updated key
 * 0.9.10: Fix https://github.com/xaldarof/encrypted-shared-preferences/issues/19
 * 1.0.0: Fix: async* + await for on a broadcast stream doesn't handle resubscription correctly
+* 1.0.1: Fix: async* + await for on a broadcast stream doesn't handle resubscription correctly for legacy decorator 
