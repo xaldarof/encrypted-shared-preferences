@@ -29,3 +29,4 @@
 * 0.9.10: Fix https://github.com/xaldarof/encrypted-shared-preferences/issues/19
 * 1.0.0: Fix: async* + await for on a broadcast stream doesn't handle resubscription correctly
 * 1.0.1: Fix: async* + await for on a broadcast stream doesn't handle resubscription correctly for legacy decorator 
+* 1.0.2: Replace `encrypt` with `encrypter_plus` and require Dart 3.

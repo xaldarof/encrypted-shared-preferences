@@ -1,4 +1,4 @@
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypter_plus/encrypter_plus.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
 
 class AESEncryptor extends IEncryptor {

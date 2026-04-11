@@ -4,14 +4,14 @@ version: 1.0.1
 homepage: "https://github.com/xaldarof/encrypted-shared-preferences"
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.3.2
-  encrypt: ^5.0.3
+  encrypter_plus: ^5.1.0
   devtools_shared: ^11.2.0
 
 
